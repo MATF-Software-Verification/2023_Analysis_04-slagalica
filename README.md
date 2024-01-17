@@ -16,5 +16,7 @@ Za svaki od navedenih alata postoji direktorijum u kome se nalaze rezultati i sk
 
 ## :memo: Rezultati i zaključci:
 
+:mag: Detaljan opis analize projekta i izvedenih zaključaka nalazi se u [ProjectAnalysisReport.pdf](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/ProjectAnalysisReport.pdf) fajlu.
+
 ##  Autor:
 <b>Pavle Savić, 1075/2022</b>
