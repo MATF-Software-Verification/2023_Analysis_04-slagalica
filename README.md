@@ -1,1 +1,20 @@
 # 2023_Analysis_04-slagalica
+
+## :memo:  Informacije o projektu:
+
+* U okviru ovog rada predstavljena je analiza projekta <b>Slagalica</b> rađenog za potrebe kursa Razvoj softvera na Matematičkom fakultetu. Projekat se nalazi na adresi https://gitlab.com/matf-bg-ac-rs/course-rs/projects-2022-2023/04-slagalica, 
+analiza je vršena nad main granom projekta i to nad commit-om čiji je heš kod d4b71df08986f678ee8187e064f0d7c0447e08ac. Opisan je postupak primene različitih alata i tehnika za verifikaciju softvera, dobijeni rezultati, pronađeni bagovi i uska grla kao i potencijalni pravci unapređenja kvaliteta analiziranog projekta.
+
+* Projekat <b>Slagalica</b> je kviz igrica napravljena po ugledu na popularni TV kviz u kome se dva igrača takmiče ko će osvojiti više poena u različitim igrama. Jedna partija sastoji se od 4 implementirane igre: Skočko, Ko zna zna, Spojnice i Asocijacije. Za implementaciju je korišćen programski jezik C++ (C++17) i razvojni okvir Qt 6 - za analizu korišćena najnovija stabilna verzija Qt 6.6.1. Neophodno je instalirati dodatne biblioteke Qt Multimedia i Qt Multimedia Widgets korišćnjem Qt Maintenance Tool-a. Detaljniji opis i tehničke informacije o preuzimanju i pokretaju, kao i demo snimak, mogu se pronaći u README.md fajlu projekta. Na pomenutom snimku autori detaljno pojašnjavanju pravila i sistem bodovanja kviza.    
+
+
+## :hammer: :wrench: Primenjeni alati/tehnike:
+Spisak korišćenih alata i tehnika za verifikaciju softvera:
+  * <b>UniteTest (QtTest)</b> + <b>Gcov</b> - analiza pokrivenosti koda postojećim testovima jedinica koda i mogućnosti za poboljšanje
+  
+Za svaki od navedenih alata postoji direktorijum u kome se nalaze rezultati i skripta za pokretanje odgovarajućeg alata. 
+
+## :memo: Rezultati i zaključci:
+
+##  Autor:
+<b>Pavle Savić, 1075/2022</b>
