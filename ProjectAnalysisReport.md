@@ -33,4 +33,34 @@ Pokrivenost koda (eng. *code coverage*) je metrika koja određuje apsolutni ili 
 Kao što je prethodno rečeno, uz analizirani projekat su dostupni testovi jedinice koda implementirani pomoću Catch2 biblioteke. U ovom odeljku ispitaćemo pokrivenost koda testovima pomoću **Gcov** i **Lcov** alata.   
 
 
+ * Na početku u .pro datoteku test projekta dodajemo sledeću naredbu:  
+```
+CONFIG += gcov 
+```
+* Qt okruženje na osnovu ovoga dodaje --coverage opciju g++-u u *Makefile*-u
+* Dodatne opcije kompilatora omogućavaju snimanje koliko je puta koja linija, grana i funkcija izvršena. Nakon *Build*-a projekta primećujemo da su u build direktorijumu test projekta osim objektnih  dodati i fajlovi sa ekstenzijom **.gcno** za svaku *source* datoteku. Upravo oni imaju tu namenu.
+
+![img](Gcov/gcno.png)
+
+* Nakon pokretanja testova možemo primetiti da se sada u build direktorijumu test projekta nalaze i fajlovi sa ekstenzijom **.gcda** za svaku *source* datoteku. U njima se nalaze informacije o pokrivenosti prikupljene tokom izvršavanja testova.
+   
+![img](Gcov/gcda.png)
+
+* Informacije iz ovih fajlova ne tumačimo direktno. Koristimo alat **Lcov** koji ih može analizirati i za nas napraviti izveštaj sa ekstenzijom **.info**. Demonstracije radi zahtevaćemo u izveštaju i informacije o pokrivenosti grana. Pozicioniramo se u build direktorijum test projekta i pokrenemo sledeću komandu:
+```
+lcov --rc lcov_branch_coverage=1 --capture --directory . -o coverage.info
+```
+* Naš izveštaj **coverage.info** možemo dati kao alatu **genhtml** koji će od njega napraviti **.html** stranice lake za pregled i analizu:
+```
+genhtml --rc lcov_branch_coverage=1 -o Reports coverage.info
+```
+* Nakon izvršenja prethodne komandu u terminalu možemo videti zbirne statistike procentualne pokrivenosti linija, funkcija i grana. Naravno, u **Reports** direktorijumu se sada nalazi detaljan html izveštaj koji možemo otvoriti u *browser*-u:
+```
+firefox Reports/index.html
+```
+![img](Gcov/coverage_unfiltered.png)
+
+
+ 
+
 
