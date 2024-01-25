@@ -23,5 +23,5 @@ Nakon ove izmene u **game.pro** datoteci projekat se prevodi. Sada možemo pokre
 
 Takođe, možemo pokrenuti testove i uveriti se da svi napisani *unit* testovi prolaze. Više reči o testovima biće u narednom odeljku.
 ![img](qmake/pokretanjetestova.png)
- 
- 
+
+
