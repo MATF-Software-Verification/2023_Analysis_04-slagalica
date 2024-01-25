@@ -24,4 +24,10 @@ Nakon ove izmene u **game.pro** datoteci projekat se prevodi. Sada možemo pokre
 Takođe, možemo pokrenuti testove i uveriti se da svi napisani *unit* testovi prolaze. Više reči o testovima biće u narednom odeljku.
 ![img](qmake/pokretanjetestova.png)
 
+Skripta za prevođenje i pokretanje jedne partije (server i dva klijenta): [start_game.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/qmake/skripte/start_game.sh) \
+Skripta za prevođenje i pokretanje testove: [start_testing.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/qmake/skripte/start_testing.sh)
+
+
+
+
 
