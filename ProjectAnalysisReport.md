@@ -60,7 +60,33 @@ firefox Reports/index.html
 ```
 ![img](Gcov/coverage_unfiltered.png)
 
+* Očekujemo visok nivo pokrivenosti linija i funkcija u **tests** projektu iako u izveštaju izgleda drugačije. Ako pogledamo .html stranicu posvećenu ovom projektu možemo se uveriti da se implementirani *unit* testovi zaista izvršavaju ali da je uzrok niske pokrivenosti to što je analizirana i pokrivenost *header-only* Catch2 biblioteke. 
 
+![img](Gcov/test_coverage.png)
  
+* I u ostatku izveštaja možemo videti gomilu informacija o pokrivenosti biblioteka jezika, Qt-a itd. Ove informacije čine izveštaj nepotrebno velikim i zamagljuju nam pokrivenost funkcionalnosti koje testiramo. U našem slučaju testiraju se podprojekti **server** i **slagalica** i samo nas njihove pokrivenosti zanimaju. Narednom komandom možemo filtrirati izveštaj od informacija o datotekama koje nisu od interesa:
+```
+lcov -r --rc lcov_branch_coverage=1 "coverage.info" "*Qt*.framework*" "*.h" "*/tests/*" "*Xcode.app*" "*.moc" "*moc_*.cpp"  "/usr/*" "/opt/*"  "*/test/*" "*/build*/*" -o "coverage-filtered.info"
+```
+* Filtrirani **coverage-filtered.info** sada možemo vizuelizovati na isti način:
+```
+genhtml --rc lcov_branch_coverage=1 -o Reports_filtered coverage-filtered.info
+firefox Reports_filtered/index.html
+```
+* Pokrivenost projekata **server** i **slagalica**:
+
+![img](Gcov/coverage_unfiltered.png)
+
+* Pokrivenost **server**-a po klasama:
+
+![img](Gcov/server_coverage.png)
+
+* Pokrivenost **slagalica**-e po klasama:
+
+![img](Gcov/slagalica_coverage.png)
+
+* Pokrivenost klase **koznazna.cpp** (možemo videti i koliko puta se izvršila svaka linija, funkcija, grana):
+
+![img](Gcov/koznazna_coverage.png)
 
 
