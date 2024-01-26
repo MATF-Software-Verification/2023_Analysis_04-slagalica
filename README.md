@@ -10,7 +10,7 @@ analiza je vršena nad main granom projekta i to nad commit-om čiji je heš kod
 
 ## :hammer: :wrench: Primenjeni alati/tehnike:
 Spisak korišćenih alata i tehnika za verifikaciju softvera:
-  * <b>UniteTest (QtTest)</b> + <b>Gcov</b> - analiza pokrivenosti koda postojećim testovima jedinica koda i mogućnosti za poboljšanje
+  * <b>Gcov</b> - analiza pokrivenosti koda postojećim testovima jedinica koda
   
 Za svaki od navedenih alata postoji direktorijum u kome se nalaze rezultati i skripta za pokretanje odgovarajućeg alata. 
 
