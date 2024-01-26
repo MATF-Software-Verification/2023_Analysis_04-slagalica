@@ -89,4 +89,4 @@ firefox Reports_filtered/index.html
 
 ![img](Gcov/koznazna_coverage.png)
 
-
+Generisani rezultati mogu se videti [ovde](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/tree/main/Gcov/rezultati).
