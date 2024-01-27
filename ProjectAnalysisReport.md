@@ -165,17 +165,20 @@ JSONSerializer::JSONSerializer() {
 JSONSerializer::JSONSerializer()=default;
 ```
 
+* **Readability** upozorenja se u velikom procentu odnose na upotrebu magičnih konstanti, kratka imena promenljivih (predložena najmanja dužina je 3), a na nekoliko mesta postoji nekonzistentost u imenovanju argumenata f-ja (različita imena argumenata u deklaraciji u .hpp fajlu i u definiciji u .cpp fajlu).
 
-* **Readability** upozorenja se u velikom procentu odnose na upotrebu magičnih konstanti, kratka imena promenljivih (predložena najmanja dužina je 3), a na nekoliko mesta postoji nekonzistentost u imenovanju argumenata f-ja (različito ime argumenta u deklaraciju u .hpp fajlu nego u definiciji u .cpp fajlu).
+* **Performance** provere nam na nekoliko mesta predlažu da koristimo **'\n'** umesto **std::endl**. Jedina razlika je u tome što **std::endl** izaziva pražnjenje izlaznog bafera i ispis na izlaz odmah što može negativno uticati na performanse.
+* Još jedan slučaj jeste prenošenje argumenta po vrednosti umesto po referenci zbog čega dolazi do nepotrebnog kopiranja. Na primer:
 
-* **Performance** 
+  ![img](Clang_Tools/Clang-Tidy/performance3.png)
 
-* **LLVM** provere se nisu pokazale kao posebno korisne u ovom slučaju. Upozorenja se odnose na redosled *include* direktiva i stil *header guard*-ova.
+* Argument **content** se ne menja u f-ji **showMessageBox** i može se proslediti kao const referenca.
 
+  ![img](Clang_Tools/Clang-Tidy/performance4.png)
+  
+* **LLVM** provere se nisu pokazale kao posebno korisne u ovom slučaju. Upozorenja se odnose na redosled *include* direktiva i stil *header guard*-ova. Pored ovoga na jednom mestu nam sugeriše da je standard da se nakon kraja okvira za namespace doda komentar za koji se namespace taj kraj odnosi.
 
-
-
-
+## Clazy
 
 
 
