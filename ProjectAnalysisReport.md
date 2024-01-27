@@ -170,11 +170,11 @@ JSONSerializer::JSONSerializer()=default;
 * **Performance** provere nam na nekoliko mesta predlažu da koristimo **'\n'** umesto **std::endl**. Jedina razlika je u tome što **std::endl** izaziva pražnjenje izlaznog bafera i ispis na izlaz odmah što može negativno uticati na performanse.
 * Još jedan slučaj jeste prenošenje argumenta po vrednosti umesto po referenci zbog čega dolazi do nepotrebnog kopiranja. Na primer:
 
-  ![img](Clang_Tools/Clang-Tidy/performance3.png)
+  ![img](Clang_Tools/Clang-Tidy/performance1.png)
 
 * Argument **content** se ne menja u f-ji **showMessageBox** i može se proslediti kao const referenca.
 
-  ![img](Clang_Tools/Clang-Tidy/performance4.png)
+  ![img](Clang_Tools/Clang-Tidy/performance2.png)
   
 * **LLVM** provere se nisu pokazale kao posebno korisne u ovom slučaju. Upozorenja se odnose na redosled *include* direktiva i stil *header guard*-ova. Pored ovoga na jednom mestu nam sugeriše da je standard da se nakon kraja okvira za namespace doda komentar za koji se namespace taj kraj odnosi.
 
