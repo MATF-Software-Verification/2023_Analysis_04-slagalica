@@ -94,3 +94,47 @@ firefox Reports_filtered/index.html
 
 Generisani rezultati mogu se videti [ovde](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/tree/main/Gcov/rezultati). \
 Skripta čijim izvršavanjem se mogu reprodukovati rezultati analize pokrivenosti (argumentom komandne linije odabira se da nefiltriran ili filtriran izveštaj): [coverage.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Gcov/skripte/coverage.sh)
+
+## Clang alati
+**Clang** je kompilator za jezike C, C++, Objective C... Tačnije, **Clang** je frontend koji kao ulaz uzima kod napisan u prethodno navedem jezicima i prevodi ga u međureprezenaticiju tj *llvm IR* i to predstavlja ulaz za središnji deo na kojem se vrše optimizacije nezavisne od jezika i arhitekture. Na kraju backend vrši optimizacije vezane za konkretnu arhitekturu i prevodi kod na mašinski jezik. U odnosu na gcc, implementiran je u C++-u korišćenjem modernijih tehnologija. Detaljnije predstavlja informacije u slučaju greške ili upozorenja, a uglavnom daje više upozorenja u odnosu na gcc. Način upotrebe je veoma sličan.
+
+## Clang-Tidy
+**Clang-Tidy** deo je Clang/LLVM projekta i predstavlja C++ **linter** alat. Njegova svrha je da obezbedi proširivi okvir za dijagnostikovanje i ispravljanje tipičnih grešaka u programiranju, poput kršenja stila, neispravne upotrebe interfejsa ili bagova koji se mogu otkriti **statičkom analizom**. **Clang-Tidy** je modularan i pruža zgodan interfejs za pisanje novih provera. 
+
+Ovaj alat je integrisan u QtCreator. Prikazaćemo način upotrebe i dobijene rezultate za naš projekat.
+
+* Odabiramo karticu **Analyze** i nakon toga **Clang-Tidy** iz padajućeg menija.
+  
+![img](Clang_Tools/Clang-Tidy/pokretanje.png)
+
+* Selektujemo fajlove nad kojima želimo da primenimo analizu (u našem slučaju svi **.hpp** i **.cpp** fajlovi u projektu).
+
+![img](Clang_Tools/Clang-Tidy/fajlovi.png)
+
+* Nakon pokretanja dobijamo 5 upozorenja. U nastavku ćemo ih ukratko analizirati i pokušati da ih otklonimo.
+
+![img](Clang_Tools/Clang-Tidy/upozorenja.png)
+
+* Prvo upozorenje odnosi se na **mrtav kod** u funkciji koja generiše pseudoslučajnu kombinaciju od 4 karaktera za igru Skočko. Vidimo da se na početku f-je u petlji 50 puta generišu pseudoslučajne vrednosti i smeštaju u promenljivu **rnd** a potom nigde ne koriste. Ovaj deo koda možemo obrisati.
+
+![img](Clang_Tools/Clang-Tidy/mrtavkod.png)
+
+* Drugo upozorenje odnosi se na potencijalno **dereferenciranje null pokazivača**. Prijavljeno je u funkciji koja u igri Spojnice treba da onesposobi jedno od 8 dugmića (ono koje odgovara uspešno povezanom pojmu). Prosleđeni argument **btnIndex** očekujemo da ima vrednost iz intervala od 0 do 7, u suprotnom će **btn** pokazivač u trenutku derefenciranja biti null. Želimo da naša funkcija bude napisana na bezbedan način.
+
+![img](Clang_Tools/Clang-Tidy/null1.png)
+
+* U C++-u ne postoji *NullPointerException* koji bismo mogli da uhvatimo u try-catch bloku. Derefernciranje null pokazivača u C++-u izaziva nedefinisano ponašanje. U ovoj funkciji rešićemo se upozorenja tako što ćemo ispaliti **invalid_argument** izuzetak ako prosleđeni argument nije u očekivanom intervalu. Sada pozive ove funkcije treba staviti u try-catch blok i obraditi izuzetak.
+
+![img](Clang_Tools/Clang-Tidy/null2.png)
+
+* Naredna dva upozorenja odnose se na **curenje memorije**. Sve što treba uraditi je pozvati **destruktor** koji će obrisati dinamički kreiran objekat dealociranjem njemu dodeljene memorije. 
+
+![img](Clang_Tools/Clang-Tidy/leak1.png)
+![img](Clang_Tools/Clang-Tidy/leak2.png)
+
+* Poslednje upozerenje se takođe odnosi na **curenje memorije**. U ovom slučaju zaključujemo da se radi o **false-positive** upozorenju jer je destruktor pozvan na drugom mestu.
+
+![img](Clang_Tools/Clang-Tidy/falsepos.png)
+
+
+
