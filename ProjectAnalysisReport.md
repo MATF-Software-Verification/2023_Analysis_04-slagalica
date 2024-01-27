@@ -98,7 +98,7 @@ Skripta čijim izvršavanjem se mogu reprodukovati rezultati analize pokrivenost
 ## Clang alati
 **Clang** je kompilator za jezike C, C++, Objective C... Tačnije, **Clang** je frontend koji kao ulaz uzima kod napisan u prethodno navedem jezicima i prevodi ga u međureprezenaticiju tj *llvm IR* i to predstavlja ulaz za središnji deo na kojem se vrše optimizacije nezavisne od jezika i arhitekture. Na kraju backend vrši optimizacije vezane za konkretnu arhitekturu i prevodi kod na mašinski jezik. U odnosu na gcc, implementiran je u C++-u korišćenjem modernijih tehnologija. Detaljnije predstavlja informacije u slučaju greške ili upozorenja, a uglavnom daje više upozorenja u odnosu na gcc. Način upotrebe je veoma sličan.
 
-## Clang-Tidy
+### Clang-Tidy
 **Clang-Tidy** deo je Clang/LLVM projekta i predstavlja C++ **linter** alat. Njegova svrha je da obezbedi proširivi okvir za dijagnostikovanje i ispravljanje tipičnih grešaka u programiranju, poput kršenja stila, neispravne upotrebe interfejsa ili bagova koji se mogu otkriti **statičkom analizom**. **Clang-Tidy** je modularan i pruža zgodan interfejs za pisanje novih provera. 
 
 Ovaj alat je integrisan u QtCreator. Prikazaćemo način upotrebe i dobijene rezultate za naš projekat.
@@ -132,9 +132,52 @@ Ovaj alat je integrisan u QtCreator. Prikazaćemo način upotrebe i dobijene rez
 ![img](Clang_Tools/Clang-Tidy/leak1.png)
 ![img](Clang_Tools/Clang-Tidy/leak2.png)
 
-* Poslednje upozerenje se takođe odnosi na **curenje memorije**. U ovom slučaju zaključujemo da se radi o **false-positive** upozorenju jer je destruktor pozvan na drugom mestu.
+* Poslednje upozerenje se takođe odnosi na **curenje memorije**. U ovom slučaju zaključujemo da se radi o **false positive** upozorenju jer je destruktor pozvan na drugom mestu.
 
 ![img](Clang_Tools/Clang-Tidy/falsepos.png)
+
+* Prethodna analiza sprovedena je sa osnovnom konfiguracijom. Sada ćemo napraviti našu *custom* konfiguraciju.
+
+* Odabiramo opciju **Edit** i nakon toga **Preferences** iz padajućeg menija i potom **Analyzer** iz liste sa leve strane.
+
+![img](Clang_Tools/Clang-Tidy/analyzer.png)
+
+* Pritiskamo na **Default Clang-Tidy and Clazy checks** nudi nam se izbor konfiguracija i opcija da napravimo novu. Jedine podrazumevano uključene jesu <b>clang-\*</b> provere, u novu konfiguraciju dodajemo i <b>modernize-\*</b>, <b>readability-\*</b>, <b>performance-\*</b> i <b>llvm-\*</b> provere.   
+
+![img](Clang_Tools/Clang-Tidy/mojakonfig.png)
+
+* Odabiramo novu konfiguraciju i pokrećemo analizu.
+
+![img](Clang_Tools/Clang-Tidy/analyzer2.png)
+
+* Dobijamo veliki broj upozorenja. U nastavku navešćemo opšti pregled i nekoliko primera.
+
+![img](Clang_Tools/Clang-Tidy/upozorenja2.png)
+
+* **Modernize** provere nam na nekoliko mesta predlažu upotrebu ključnih reči **auto** i **override**, **trailing-return-type**... Primećujemo da su ove funkcionalnosti dodate u **C++11** standardu. Navedene sugestije treba pažljivo primenjivati jer u nekim slučajevima mogu da smanje čitljivost (npr. prečesto korišćenje ključne reci **auto**).
+* Još jedan primer odnosi se na definisanje podrazumevanog konstruktora:
+```
+JSONSerializer::JSONSerializer() {
+}
+```
+* Ovaj kod možemo zameniti narednim:
+```
+JSONSerializer::JSONSerializer()=default;
+```
+
+
+* **Readability** upozorenja se u velikom procentu odnose na upotrebu magičnih konstanti, kratka imena promenljivih (predložena najmanja dužina je 3), a na nekoliko mesta postoji nekonzistentost u imenovanju argumenata f-ja (različito ime argumenta u deklaraciju u .hpp fajlu nego u definiciji u .cpp fajlu).
+
+* **Performance** 
+
+* **LLVM** provere se nisu pokazale kao posebno korisne u ovom slučaju. Upozorenja se odnose na redosled *include* direktiva i stil *header guard*-ova.
+
+
+
+
+
+
+
 
 
 
