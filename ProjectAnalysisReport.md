@@ -176,7 +176,7 @@ JSONSerializer::JSONSerializer()=default;
 
   ![img](Clang_Tools/Clang-Tidy/performance2.png)
   
-* **LLVM** provere se nisu pokazale kao posebno korisne u ovom slučaju. Upozorenja se odnose na redosled *include* direktiva i stil *header guard*-ova. Pored ovoga na jednom mestu nam sugeriše da je standard da se nakon kraja okvira za namespace doda komentar za koji se namespace taj kraj odnosi.
+* **LLVM** provere se nisu pokazale kao posebno korisne u ovom slučaju. Upozorenja se odnose na redosled *include* direktiva i stil *header guard*-ova. Pored ovoga na jednom mestu nam sugeriše da je standard da se nakon kraja okvira za namespace doda komentar na koji se namespace taj kraj odnosi.
 
 ### Clazy
 
