@@ -178,7 +178,7 @@ JSONSerializer::JSONSerializer()=default;
   
 * **LLVM** provere se nisu pokazale kao posebno korisne u ovom slučaju. Upozorenja se odnose na redosled *include* direktiva i stil *header guard*-ova. Pored ovoga na jednom mestu nam sugeriše da je standard da se nakon kraja okvira za namespace doda komentar za koji se namespace taj kraj odnosi.
 
-## Clazy
+### Clazy
 
 
 
