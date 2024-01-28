@@ -150,11 +150,11 @@ Ovaj alat je integrisan u QtCreator. Prikazaćemo način upotrebe i dobijene rez
 
 ![img](Clang_Tools/Clang-Tidy/analyzer2.png)
 
-* Dobijamo veliki broj upozorenja. U nastavku navešćemo opšti pregled i nekoliko primera.
+* Dobijamo veliki broj upozorenja. U nastavku navešćemo opšti pregled i nekoliko primera. Napominjemo da alat takođe nudi i **fixits** - predloge rešenja pojedinih nađenih problema. Da bismo primenili predlog dovoljno je da se pozicioniramo na odgovarajuće mesto u kodu i pritisnemo **Alt+Enter**.
 
 ![img](Clang_Tools/Clang-Tidy/upozorenja2.png)
 
-* **Modernize** provere nam na nekoliko mesta predlažu upotrebu ključnih reči **auto** i **override**, **trailing-return-type**... Primećujemo da su ove funkcionalnosti dodate u **C++11** standardu. Navedene sugestije treba pažljivo primenjivati jer u nekim slučajevima mogu da smanje čitljivost (npr. prečesto korišćenje ključne reci **auto**).
+* **Modernize** provere nam na nekoliko mesta predlažu upotrebu ključnih reči **auto** i **override**, **trailing-return-type**... Primećujemo da su ove funkcionalnosti dodate u **C++11** standardu. Na nekoliko mesta nam savetuje da dodamo **[[nodiscard]]** atribut na deklaraciju funkcija. Ovaj atribut dodat je u **C++17** standardu i predstavlja *hint* prevodiocu (ali i programerima) da se povratna vrednost f-je ne sme zanemariti. Navedene sugestije treba pažljivo primenjivati jer u nekim slučajevima mogu da smanje čitljivost (npr. prečesto korišćenje ključne reci **auto**).
 * Još jedan primer odnosi se na definisanje podrazumevanog konstruktora:
 ```
 JSONSerializer::JSONSerializer() {
