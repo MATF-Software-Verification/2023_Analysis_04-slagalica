@@ -10,7 +10,11 @@ analiza je vršena nad main granom projekta i to nad commit-om čiji je heš kod
 
 ## :hammer: :wrench: Primenjeni alati/tehnike:
 Spisak korišćenih alata i tehnika za verifikaciju softvera:
-  * <b>Gcov</b> - analiza pokrivenosti koda postojećim testovima jedinica koda
+  - **Gcov** - analiza pokrivenosti koda postojećim testovima jedinica koda
+  - **Clang alati**:
+    - **Clang-Tidy**
+    - **Clazy**
+    - **Clang-Format**
   
 Za svaki od navedenih alata postoji direktorijum u kome se nalaze rezultati i skripta za pokretanje odgovarajućeg alata. 
 
