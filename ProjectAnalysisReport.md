@@ -28,6 +28,7 @@ Skripta za prevođenje projekta i pokretanje jedne partije (server i dva klijent
 Skripta za prevođenje projekta i pokretanje testova: [start_testing.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/qmake/skripte/start_testing.sh)
 
 ## Analiza pokrivenosti pomoću Gcov
+
 Pokrivenost koda (eng. *code coverage*) je metrika koja određuje apsolutni ili relativni broj linija, grana ili putanja koje su uspešno proverene našim procesom testiranja. \
 **Gcov** je alat, dostupan uz gcc kompilator, koji služi za određivanje pokrivenosti koda prilikom izvršavanja programa. Koristi se da bi se analizirao program i utvrdilo kako se može kreirati efikasniji program i da bi se uvrtdilo koliko je koji deo koda pokrivenim testovima. Zarad lepše reprezentacije rezultata detekcije pokrivenosti koda izvršavanjem test primera, koristimo ekstenziju **Lcov**. \
 Kao što je prethodno rečeno, uz analizirani projekat su dostupni testovi jedinice koda implementirani pomoću Catch2 biblioteke. U ovom odeljku ispitaćemo pokrivenost koda testovima pomoću **Gcov** i **Lcov** alata.   
@@ -96,9 +97,11 @@ Generisani rezultati mogu se videti [ovde](https://github.com/MATF-Software-Veri
 Skripta čijim izvršavanjem se mogu reprodukovati rezultati analize pokrivenosti (argumentom komandne linije odabira se da nefiltriran ili filtriran izveštaj): [coverage.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Gcov/skripte/coverage.sh)
 
 ## Clang alati
+
 **Clang** je kompilator za jezike C, C++, Objective C... Tačnije, **Clang** je frontend koji kao ulaz uzima kod napisan u prethodno navedem jezicima i prevodi ga u međureprezenaticiju tj *llvm IR* i to predstavlja ulaz za središnji deo na kojem se vrše optimizacije nezavisne od jezika i arhitekture. Na kraju backend vrši optimizacije vezane za konkretnu arhitekturu i prevodi kod na mašinski jezik. U odnosu na gcc, implementiran je u C++-u korišćenjem modernijih tehnologija. Detaljnije predstavlja informacije u slučaju greške ili upozorenja, a uglavnom daje više upozorenja u odnosu na gcc. Način upotrebe je veoma sličan.
 
 ### Clang-Tidy
+
 **Clang-Tidy** deo je Clang/LLVM projekta i predstavlja C++ **linter** alat. Njegova svrha je da obezbedi proširivi okvir za dijagnostikovanje i ispravljanje tipičnih grešaka u programiranju, poput kršenja stila, neispravne upotrebe interfejsa ili bagova koji se mogu otkriti **statičkom analizom**. **Clang-Tidy** je modularan i pruža zgodan interfejs za pisanje novih provera. 
 
 Ovaj alat je integrisan u QtCreator. Prikazaćemo način upotrebe i dobijene rezultate za naš projekat.
@@ -178,7 +181,40 @@ JSONSerializer::JSONSerializer()=default;
   
 * **LLVM** provere se nisu pokazale kao posebno korisne u ovom slučaju. Upozorenja se odnose na redosled *include* direktiva i stil *header guard*-ova. Pored ovoga na jednom mestu nam sugeriše da je standard da se nakon kraja okvira za namespace doda komentar na koji se namespace taj kraj odnosi.
 
+* **Rezime**: **Clang-Tidy** alat pomogao nam je da otkrijemo propuste vezane za mrtav kod i curenje memorije kojih nije bilo puno ako uzmemo u obzir obim projekta. U projektu se koriste funkcionalnosti novijih standarda jezika ali ne u potpunosti dosledno. Čitljivost bi se mogla poboljšati korišćenjem deskriptivnijih imena promenljivih i izbegavanjem korišćenja magičinih konstanti. Na performansama bi se moglo dobiti izbegavanjem nepotrebnih kopiranja.
+
+
 ### Clazy
+
+* **Clazy** je alat za **statičku analizu** i predstavlja dodatak **Clang**-a koji ga proširuje sa preko 50 upozorenja vezanih za dobre prakse korišćenja Qt biblioteka. Njegov zadatak je da prikazuje upozorenja kompajlera vezana za Qt, kao što su nepravilno korišćenje API-ja, potencijalno curenje memorije, nepravilne konverzije tipova podataka.  Kao i **Clang-Tidy** omogućava automatske izmene koda za neka upozorenja (manji broj njih).  
+
+Ovaj alat je integrisan u QtCreator. Prikazaćemo način upotrebe i dobijene rezultate za naš projekat.
+
+* Na isti način kao kod prethodnog alata možemo odabrati provere koje želimo i napraviti našu konfiguraciju. Provere su podeljene na ne nivoe 0, 1 i 2 pri čemu sa povećanjem nivoa raste mogućnost prijavljivanja lažno pozitivnih upozorenja. Pored ovih provere postoji još nekategorisanih provera koje je neophodno manuelno uključiti. S obzirom da želimo što kompletniju analizu u ovom slučaju nećemo menjati podrazumevanu konfiguraciju koja podrazumeva nivoe 0 i 1 za koje imamo garanciju *veoma male* verovatnoće lažno pozitivnih upozorenja.
+
+![img](Clang_Tools/Clazy/konfig.png)
+
+* Odabiramo karticu **Analyze** i nakon toga **Clazy** iz padajućeg menija.
+
+* Selektujemo fajlove nad kojima želimo da primenimo analizu (u našem slučaju svi **.hpp** i **.cpp** fajlovi u projektu).
+
+* Nakon pokretanja dobijamo veliki broj upozorenja. 
+
+![img](Clang_Tools/Clazy/level0+1.png)
+
+* Demonstracije radi fokusiraćemo se na otklanjanje 11 upozorenja provera nivoa 0. 
+
+![img](Clang_Tools/Clazy/level0.png)
+
+* Uočavamo da se najčešće javlja **alokacija nepotrebnog privremenog kontejnera**. U svih 6 slučajeva problem se javlja iz istog razloga. Pozivom funkcije **keys()** nad mapom kreira se novi kontejner ključeva postojeće mape i onda se iterira kroz njega.
+
+![img](Clang_Tools/Clazy/container.png)
+
+* **QMap** i **QHash** imaju nešto drugačiji API nego **std::map** i derefernciranjem iteratora se zapravo dobija samo vrednost pa ne možemo direktno da iskoristimo *range-based* for petlju. Problem se može rešiti korišćenjem **QMap::key_value_iterator**-a pri čemu možemo da iskoristimo moderniju veoma čitljivu sintaksu (f-ja **QMap::asKeyValueRange()** dodata je u Qt 6.4). Svih 6 upozorenja rešavamo na ovaj način (na slici ispod su prva 4):
+
+![img](Clang_Tools/Clazy/container2.png)
+
+
 
 
 
