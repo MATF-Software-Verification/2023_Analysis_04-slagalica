@@ -168,10 +168,10 @@ JSONSerializer::JSONSerializer() {
 JSONSerializer::JSONSerializer()=default;
 ```
 
-* **Readability** upozorenja se u velikom procentu odnose na upotrebu magičnih konstanti, kratka imena promenljivih (predložena najmanja dužina je 3), a na nekoliko mesta postoji nekonzistentost u imenovanju argumenata f-ja (različita imena argumenata u deklaraciji u .hpp fajlu i u definiciji u .cpp fajlu).
+* **Readability** upozorenja se u velikom procentu odnose na upotrebu **magičnih konstanti**, **kratka imena promenljivih** (predložena najmanja dužina je 3), a na nekoliko mesta postoji **nekonzistentost u imenovanju argumenata f-ja** (različita imena argumenata u deklaraciji u .hpp fajlu i u definiciji u .cpp fajlu). Pored ovoga postoji nekoliko slučajeva **pristupa statičkim poljima i funkcijama klasa preko instanci**. 
 
 * **Performance** provere nam na nekoliko mesta predlažu da koristimo **'\n'** umesto **std::endl**. Jedina razlika je u tome što **std::endl** izaziva pražnjenje izlaznog bafera i ispis na izlaz odmah što može negativno uticati na performanse.
-* Još jedan slučaj jeste prenošenje argumenta po vrednosti umesto po referenci zbog čega dolazi do nepotrebnog kopiranja. Na primer:
+* Još jedan slučaj jeste prenošenje argumenta po vrednosti umesto po referenci zbog čega dolazi do **nepotrebnog kopiranja**. Na primer:
 
   ![img](Clang_Tools/Clang-Tidy/performance1.png)
 
@@ -185,7 +185,7 @@ JSONSerializer::JSONSerializer()=default;
 
 ### Clazy
 
-**Clazy** je alat za **statičku analizu** i predstavlja dodatak **Clang**-a koji ga proširuje sa preko 50 upozorenja vezanih za dobre prakse korišćenja Qt biblioteka. Njegov zadatak je da prikazuje upozorenja kompajlera vezana za Qt, kao što su nepravilno korišćenje API-ja, potencijalno curenje memorije, nepravilne konverzije tipova podataka. Kao i **Clang-Tidy** omogućava automatske izmene koda za neka upozorenja (manji broj njih).  
+* **Clazy** je alat za **statičku analizu** i predstavlja dodatak **Clang**-a koji ga proširuje sa preko 50 dijagnostika vezanih za dobre prakse korišćenja Qt biblioteka. Njegov zadatak je da prikazuje upozorenja kompajlera vezana za Qt, kao što su nepravilno korišćenje API-ja, potencijalno curenje memorije, nepravilne konverzije tipova podataka. Kao i **Clang-Tidy** omogućava automatske izmene koda za neka upozorenja (manji broj njih).  
 
 Ovaj alat je integrisan u QtCreator. Prikazaćemo način upotrebe i dobijene rezultate za naš projekat.
 
@@ -217,5 +217,21 @@ Ovaj alat je integrisan u QtCreator. Prikazaćemo način upotrebe i dobijene rez
 
 * Dva upozorenja odnose se na lokalne promenljive tipa **QStringList** koja je deklarisana, odnosno **QVector** koja je inicijalizovana, ali nigde **nisu upotrebljene**. Možemo obrisati njihovu deklaraciju/inicijalizaciju.
 
+* Funkcija **QObject::connect** kao argumente ima redom: pošiljaoca, signal, primaoca, slot i tip konekcije. U ovom slučaju za tip konekcije iskorišćena je konstanta **Qt::UniqueConnection** enumeratorskog tipa **Qt::ConnectionType**. Kada prosledimo ovaj tip, **veza će biti uspostavljena samo ako nije duplikat**. Ako već postoji potpuno isti signal za potpuno isti slot nad istim objektima, veza neće uspeti i **QObject::connect** će vratiti false. Ovaj tip veze ne radi ako je slot funkcija lambda, non-member ili funktor. Naš primer nije nijedan od tih slučajeva te zaključujemo da je ovo upozorenje ipak **false positive**.
+
+![img](Clang_Tools/Clazy/uniqueconnection.png)
+
+
+* Pregledom upozorenja provera nivoa 1 utvrđeno je jedno posebno često. 
+
+![img](Clang_Tools/Clazy/detach.png)
+
+* Koristimo **qAsConst** da bismo *cast*-ovali kolekciju koju obilazimo (bez izmena elemenata) iz **QVector** u **const QVector** i sprečili nepotrebno kopiranje. Time rešavamo sva upozorenja ovog tipa.
+
+![img](Clang_Tools/Clazy/detach2.png)
+
+* **Rezime**: **Clazy** pokazao se kao veoma korisna dopuna **Clang-Tidy** alata u kontekstu domenskog znanja pisanja kvalitetnog koda u Qt razvojnom okviru. Poželjno ih je koristiti zajedno kada analiziramo Qt aplikacije.
 
 ### Clang-Format
+
+
