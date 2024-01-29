@@ -50,7 +50,7 @@ CONFIG += gcov
 ```
 lcov --rc lcov_branch_coverage=1 --capture --directory . -o coverage.info
 ```
-* Naš izveštaj **coverage.info** možemo dati kao alatu **genhtml** koji će od njega napraviti **.html** stranice lake za pregled i analizu:
+* Naš izveštaj **coverage.info** možemo dati alatu **genhtml** koji će od njega napraviti **.html** stranice lake za pregled i analizu:
 ```
 genhtml --rc lcov_branch_coverage=1 -o Reports coverage.info
 ```
@@ -185,7 +185,7 @@ JSONSerializer::JSONSerializer()=default;
 
 ### Clazy
 
-* **Clazy** je alat za **statičku analizu** i predstavlja dodatak **Clang**-a koji ga proširuje sa preko 50 dijagnostika vezanih za dobre prakse korišćenja Qt biblioteka. Njegov zadatak je da prikazuje upozorenja kompajlera vezana za Qt, kao što su nepravilno korišćenje API-ja, potencijalno curenje memorije, nepravilne konverzije tipova podataka. Kao i **Clang-Tidy** omogućava automatske izmene koda za neka upozorenja (manji broj njih).  
+**Clazy** je alat za **statičku analizu** i predstavlja dodatak **Clang**-a koji ga proširuje sa preko 50 dijagnostika vezanih za dobre prakse korišćenja Qt biblioteka. Njegov zadatak je da prikazuje upozorenja kompajlera vezana za Qt, kao što su nepravilno korišćenje API-ja, potencijalno curenje memorije, nepravilne konverzije tipova podataka. Kao i **Clang-Tidy** omogućava automatske izmene koda za neka upozorenja (manji broj njih).  
 
 Ovaj alat je integrisan u QtCreator. Prikazaćemo način upotrebe i dobijene rezultate za naš projekat.
 
@@ -233,5 +233,37 @@ Ovaj alat je integrisan u QtCreator. Prikazaćemo način upotrebe i dobijene rez
 * **Rezime**: **Clazy** pokazao se kao veoma korisna dopuna **Clang-Tidy** alata u kontekstu domenskog znanja pisanja kvalitetnog koda u Qt razvojnom okviru. Poželjno ih je koristiti zajedno kada analiziramo Qt aplikacije.
 
 ### Clang-Format
+
+**Clang-Format** je alat za automatsko **formatiranje koda**. Prilikom pozivanja alata opcijom *--style* možemo odabrati jedan od 7 postojećih stilova: LLVM, Google, Chromium, Mozilla, WebKit, Microsoft, GNU. Pored predefinsaih stilova alat nam pruža mogućnost definisanja našeg stila u datoteci **.clang-format**. Ova datoteka je u YAML formatu, svaka linija je oblika **KLJUČ:VREDNOST** (odgovarajućem svojstvu stila pridružujemo neku od mogućih vrednosti).   
+
+Ovaj alat koristićemo iz komandne linije. Prikazaćemo način generisanje novog stila i primenu alata na naš projekat.
+
+* Novi format možemo da pravimo od 0. Ipak, dobrom praksom se smatra zasnivanje stila na nekom od već postojećih. Za ovu priliku odabiramo **LLVM stil**. Narednom komandom čitavu konfiguraciju LLVM stila ubacujemo sam u svoj .clang-format fajl 
+```
+clang-format --style=LLVM -dump-config > .clang-format 
+```
+- Napravićemo nekoliko izmena u fajlu :
+  - IndentWidth: 2 -> 4
+  - TabWidth: 8 -> 4
+  - PointerAlignment: Right -> Left
+  - BreakBeforeBraces: GNU -> Linux
+  - FixNamespaceComments: false -> true
+
+![img](Clang_Tools/Clang-Format/yaml.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
