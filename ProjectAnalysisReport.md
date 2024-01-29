@@ -186,11 +186,11 @@ JSONSerializer::JSONSerializer()=default;
 
 ### Clazy
 
-* **Clazy** je alat za **statičku analizu** i predstavlja dodatak **Clang**-a koji ga proširuje sa preko 50 upozorenja vezanih za dobre prakse korišćenja Qt biblioteka. Njegov zadatak je da prikazuje upozorenja kompajlera vezana za Qt, kao što su nepravilno korišćenje API-ja, potencijalno curenje memorije, nepravilne konverzije tipova podataka.  Kao i **Clang-Tidy** omogućava automatske izmene koda za neka upozorenja (manji broj njih).  
+* **Clazy** je alat za **statičku analizu** i predstavlja dodatak **Clang**-a koji ga proširuje sa preko 50 upozorenja vezanih za dobre prakse korišćenja Qt biblioteka. Njegov zadatak je da prikazuje upozorenja kompajlera vezana za Qt, kao što su nepravilno korišćenje API-ja, potencijalno curenje memorije, nepravilne konverzije tipova podataka. Kao i **Clang-Tidy** omogućava automatske izmene koda za neka upozorenja (manji broj njih).  
 
 Ovaj alat je integrisan u QtCreator. Prikazaćemo način upotrebe i dobijene rezultate za naš projekat.
 
-* Na isti način kao kod prethodnog alata možemo odabrati provere koje želimo i napraviti našu konfiguraciju. Provere su podeljene na ne nivoe 0, 1 i 2 pri čemu sa povećanjem nivoa raste mogućnost prijavljivanja lažno pozitivnih upozorenja. Pored ovih provere postoji još nekategorisanih provera koje je neophodno manuelno uključiti. S obzirom da želimo što kompletniju analizu u ovom slučaju nećemo menjati podrazumevanu konfiguraciju koja podrazumeva nivoe 0 i 1 za koje imamo garanciju *veoma male* verovatnoće lažno pozitivnih upozorenja.
+* Na isti način kao kod prethodnog alata možemo odabrati provere koje želimo i napraviti našu konfiguraciju. Provere su podeljene na ne nivoe 0, 1 i 2 pri čemu sa povećanjem nivoa raste mogućnost prijavljivanja lažno pozitivnih upozorenja. Pored ovih provera postoji još nekategorisanih provera koje je neophodno manuelno uključiti. S obzirom da želimo što kompletniju analizu u ovom slučaju nećemo menjati podrazumevanu konfiguraciju koja podrazumeva nivoe 0 i 1 za koje imamo garanciju *veoma male* verovatnoće lažno pozitivnih upozorenja.
 
 ![img](Clang_Tools/Clazy/konfig.png)
 
@@ -214,9 +214,9 @@ Ovaj alat je integrisan u QtCreator. Prikazaćemo način upotrebe i dobijene rez
 
 ![img](Clang_Tools/Clazy/container2.png)
 
+* Dva upozorenja se odnose na **imena slotova** (funkcija koje reaguju na signale određenih objekata) jer nisu konzistentna sa ostalim imenima slotova (koriste se imena sa podvlakama umesto kamilje notacije). Menjamo **on_pushButton_clicked** sa **onPushButtonClicked** i **on_pbNazad_clicked** sa **onPbNazadClicked**. Konzistenost sistema imenovanja u timu veoma je važna u kontekstu razumevanja i efikasnog održavanja koda i doprinosi izradi kvalitetnijeg softvera.
+
+* Dva upozorenja odnose se na lokalne promenljive tipa **QStringList** koja je deklarisana, odnosno **QVector** koja je inicijalizovana, ali nigde **nisu upotrebljene**. Možemo obrisati njihovu deklaraciju/inicijalizaciju.
 
 
-
-
-
-
+### Clang-Format
