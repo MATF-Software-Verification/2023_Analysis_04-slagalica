@@ -183,10 +183,9 @@ JSONSerializer::JSONSerializer()=default;
 
 * **Rezime**: **Clang-Tidy** alat pomogao nam je da otkrijemo propuste vezane za mrtav kod i curenje memorije kojih nije bilo puno ako uzmemo u obzir obim projekta. U projektu se koriste funkcionalnosti novijih standarda jezika ali ne u potpunosti dosledno. Čitljivost bi se mogla poboljšati korišćenjem deskriptivnijih imena promenljivih i izbegavanjem korišćenja magičinih konstanti. Na performansama bi se moglo dobiti izbegavanjem nepotrebnih kopiranja.
 
-
 ### Clazy
 
-* **Clazy** je alat za **statičku analizu** i predstavlja dodatak **Clang**-a koji ga proširuje sa preko 50 upozorenja vezanih za dobre prakse korišćenja Qt biblioteka. Njegov zadatak je da prikazuje upozorenja kompajlera vezana za Qt, kao što su nepravilno korišćenje API-ja, potencijalno curenje memorije, nepravilne konverzije tipova podataka. Kao i **Clang-Tidy** omogućava automatske izmene koda za neka upozorenja (manji broj njih).  
+**Clazy** je alat za **statičku analizu** i predstavlja dodatak **Clang**-a koji ga proširuje sa preko 50 upozorenja vezanih za dobre prakse korišćenja Qt biblioteka. Njegov zadatak je da prikazuje upozorenja kompajlera vezana za Qt, kao što su nepravilno korišćenje API-ja, potencijalno curenje memorije, nepravilne konverzije tipova podataka. Kao i **Clang-Tidy** omogućava automatske izmene koda za neka upozorenja (manji broj njih).  
 
 Ovaj alat je integrisan u QtCreator. Prikazaćemo način upotrebe i dobijene rezultate za naš projekat.
 
