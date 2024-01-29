@@ -236,7 +236,7 @@ Ovaj alat je integrisan u QtCreator. Prikazaćemo način upotrebe i dobijene rez
 
 **Clang-Format** je alat za automatsko **formatiranje koda**. Prilikom pozivanja alata opcijom *--style* možemo odabrati jedan od 7 postojećih stilova: LLVM, Google, Chromium, Mozilla, WebKit, Microsoft, GNU. Pored predefinsaih stilova alat nam pruža mogućnost definisanja našeg stila u datoteci **.clang-format**. Ova datoteka je u YAML formatu, svaka linija je oblika **KLJUČ:VREDNOST** (odgovarajućem svojstvu stila pridružujemo neku od mogućih vrednosti).   
 
-Ovaj alat koristićemo iz komandne linije. Prikazaćemo način generisanje novog stila i primenu alata na naš projekat.
+Ovaj alat koristićemo iz komandne linije. Prikazaćemo način generisanja novog stila i primenu alata na naš projekat.
 
 * Novi format možemo da pravimo od nule. Ipak, dobrom praksom se smatra zasnivanje stila na nekom od već postojećih. Za ovu priliku odabiramo **LLVM stil**. Narednom komandom čitavu konfiguraciju LLVM stila ubacujemo u .clang-format fajl. 
 ```
@@ -251,12 +251,12 @@ clang-format --style=LLVM -dump-config > .clang-format
 
 ![img](Clang_Tools/Clang-Format/yaml.png)
 
-* Da bismo pozvali **Clang-Format** za sve C++ datoteke (sa ekstenzijama .h, .c, .hpp, .cpp) u projektu napisali smo jednostavnu **python skriptu** run_clang_format.py koja rekurzivno obilazi direktorijum i za svaki takav fajl poziva **Clang-Format**. Opcija -i znači da se formatiranje vrši *in place* što u ovom slučaju želimo. Skripta nam nudi i mogućnost formatiranja nekim od predefinisanih stilova zadavanjem dodatnog argumenta komandne linije prilikom poziva (pogledati komentare u skripti za detaljnije informacije). Pozicioniramo se u direktorijum u kome su skripta i .clang-format i pozovemo narednu komandu.
+* Da bismo pozvali **Clang-Format** za sve C++ datoteke (sa ekstenzijama .h, .c, .hpp, .cpp) u projektu napisali smo jednostavnu **python skriptu** [run_clang_format.py](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Clang_Tools/Clang-Format/skripte/run_clang_format.py) koja rekurzivno obilazi direktorijum i za svaki takav fajl poziva **Clang-Format**. Opcija -i znači da se formatiranje vrši *in place* što u ovom slučaju želimo. Skripta nam nudi i mogućnost formatiranja nekim od predefinisanih stilova zadavanjem dodatnog argumenta komandne linije prilikom poziva (pogledati komentare u skripti za detaljnije informacije). Pozicioniramo se u direktorijum u kome su skripta i .clang-format i pozovemo narednu komandu.
 ```
 python3 run_clang_format.py ../../../04-slagalica/src
 ```
+* Pregledom fajlova projekta možemo se uveriti da je sprovedeno automatsko formatiranje zadatim stilom.
 
-* Pregled fajlova projekta možemo se uveriti da je sprovedeno automatsko formatiranje zadatim stilom.
+Konfiguracija našeg stila može se videti [ovde](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Clang_Tools/Clang-Format/skripte/.clang-format).
 
-
-
+Skripta za primenu alata nad projektom 
