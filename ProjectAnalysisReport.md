@@ -246,7 +246,7 @@ clang-format --style=LLVM -dump-config > .clang-format
   - IndentWidth: 2 -> 4
   - TabWidth: 8 -> 4
   - PointerAlignment: Right -> Left
-  - BreakBeforeBraces: GNU -> Linux
+  - BreakBeforeBraces: Attach -> Linux
   - FixNamespaceComments: false -> true
 
 ![img](Clang_Tools/Clang-Format/yaml.png)
@@ -257,6 +257,9 @@ python3 run_clang_format.py ../../../04-slagalica/src
 ```
 * Pregledom fajlova projekta možemo se uveriti da je sprovedeno automatsko formatiranje zadatim stilom.
 
+* Radi održavanja formata tokom rada na projektu pre svakog novog *commit*-a može se pozvati alat **git-clang-format** (ovo se može automatizovati definisanjem *pre-commit git hook*-a koji bi pozivao ovaj alat).
+
 Konfiguracija našeg stila može se videti [ovde](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Clang_Tools/Clang-Format/skripte/.clang-format).
 
-Skripta za primenu alata nad projektom 
+Skripta za primenu alata nad projektom: [clang_format.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Clang_Tools/Clang-Format/skripte/clang_format.sh)
+

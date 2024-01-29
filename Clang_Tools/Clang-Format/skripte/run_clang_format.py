@@ -28,7 +28,7 @@ if __name__ == "__main__":
     # ako imamo 1 argument to je direktorijum i pozivamo clang-format sa stilom definisanim u .clang-format fajlu     
     dir = args[0]
     
-    # ako imamo 2 ili vise argumenata (nakon 2. se ignorisu) prvi je direktorijum a drugi je ime ugradjenog stila
+    # ako imamo 2 ili vise argumenata (nakon 2. se ignorisu) prvi je direktorijum a drugi je ime ugradjenog stila (ako se zada 'file' takodje uzima stil iz .clang-format fajla)
     if len(args) > 1:
         style = args[1]
 	
