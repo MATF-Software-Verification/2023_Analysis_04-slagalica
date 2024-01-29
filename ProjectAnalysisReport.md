@@ -238,7 +238,7 @@ Ovaj alat je integrisan u QtCreator. Prikazaćemo način upotrebe i dobijene rez
 
 Ovaj alat koristićemo iz komandne linije. Prikazaćemo način generisanje novog stila i primenu alata na naš projekat.
 
-* Novi format možemo da pravimo od 0. Ipak, dobrom praksom se smatra zasnivanje stila na nekom od već postojećih. Za ovu priliku odabiramo **LLVM stil**. Narednom komandom čitavu konfiguraciju LLVM stila ubacujemo sam u svoj .clang-format fajl 
+* Novi format možemo da pravimo od nule. Ipak, dobrom praksom se smatra zasnivanje stila na nekom od već postojećih. Za ovu priliku odabiramo **LLVM stil**. Narednom komandom čitavu konfiguraciju LLVM stila ubacujemo u .clang-format fajl. 
 ```
 clang-format --style=LLVM -dump-config > .clang-format 
 ```
@@ -251,19 +251,12 @@ clang-format --style=LLVM -dump-config > .clang-format
 
 ![img](Clang_Tools/Clang-Format/yaml.png)
 
+* Da bismo pozvali **Clang-Format** za sve C++ datoteke (sa ekstenzijama .h, .c, .hpp, .cpp) u projektu napisali smo jednostavnu **python skriptu** run_clang_format.py koja rekurzivno obilazi direktorijum i za svaki takav fajl poziva **Clang-Format**. Opcija -i znači da se formatiranje vrši *in place* što u ovom slučaju želimo. Skripta nam nudi i mogućnost formatiranja nekim od predefinisanih stilova zadavanjem dodatnog argumenta komandne linije prilikom poziva (pogledati komentare u skripti za detaljnije informacije). Pozicioniramo se u direktorijum u kome su skripta i .clang-format i pozovemo narednu komandu.
+```
+python3 run_clang_format.py ../../../04-slagalica/src
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
+* Pregled fajlova projekta možemo se uveriti da je sprovedeno automatsko formatiranje zadatim stilom.
 
 
 
