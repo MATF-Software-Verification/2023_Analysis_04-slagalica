@@ -264,7 +264,7 @@ Skripta za primenu alata nad projektom: [clang_format.sh](https://github.com/MAT
 
 ## Flawfinder
 
-**Flawfinder** je **statički** analizator otvorenog koda sa fokusom pronalaska **bezbednosnih propusta** u C/C++ programima. Poseduje predefinisanih skup pravila koji koristi prilikom traženja potencijalno nebezbednih mesta unutar programa. Kao izlaz, dobija se izveštaj u kome svaki od prijavljenih problema ima svoju ocenu **nivoa rizika**. **Nivo rizika** ima vrednost u opsegu od 0 do 5, pri čemu 0 predstavlja veoma mali rizik, a 5 veliki rizik. Naravno, treba imati u vidu da alat nije saglasan niti kompletan te su moguća lažno pozitivna i lažno negativna upozorenja. U tom kontekstu dobra je praksa analizu izveštaja početi od upozorenja sa velikom ocenom rizika.
+**Flawfinder** je **statički** analizator otvorenog koda sa fokusom pronalaska **bezbednosnih propusta** u C/C++ programima. Poseduje skup predefinisanih pravila koje koristi prilikom traženja potencijalno nebezbednih mesta unutar programa. Kao izlaz, dobija se izveštaj u kome svaki od prijavljenih problema ima svoju ocenu **nivoa rizika**. **Nivo rizika** ima vrednost u opsegu od 0 do 5, pri čemu 0 predstavlja veoma mali, a 5 veliki rizik. Naravno, treba imati u vidu da alat nije saglasan niti kompletan te su moguća lažno pozitivna i lažno negativna upozorenja. U tom kontekstu dobra je praksa analizu izveštaja početi od upozorenja sa velikom ocenom rizika.
 
 Ovaj alat koristićemo iz komandne linije. Prikazaćemo jedan primer generisanja izveštaja za naš projekat. Vrlo detaljne tehničke informacije o mogućnostima i opcijama alata mogu se pronaći u *man* stranici alata.
 
@@ -274,20 +274,19 @@ flawfinder --html --minlevel=2 src/serialization src/server src/slagalica > flaw
 ```
 * Izlaz smo preusmerili u **flawfinder_report.html**. Ovaj fajl sada možemo otvoriti u *browser*-u.
 ```
-firefox flawdinder_report.html
+firefox flawfinder_report.html
 ```
-* U izveštaju imamo prijavljen 7 bezbednosnih rizika sortiranih opadajuće po nivou. Za svaki imamo dostupne informacije redom: lokacija u kodu, nivo rizika, opis, kod, savet za rešavanje. Kao što možemo videti **nema rizika visokog nivoa**, prijavljeno je **2 rizika nivoa 3** i **5 rizika nivoa 2**. Pritiskom na kod upozorenja otvara se stranica gde se možemo detaljnije upoznati sa tim tipom upozorenja. 
+* U izveštaju imamo prijavljeno **7 bezbednosnih rizika** sortiranih opadajuće po nivou. Za svaki imamo dostupne informacije redom: lokacija u kodu, nivo rizika, opis, kod, savet za rešavanje. Kao što možemo videti **nema rizika visokog nivoa**, prijavljeno je **2 rizika nivoa 3** i **5 rizika nivoa 2**. Pritiskom na kod upozorenja otvara se stranica gde se možemo detaljnije upoznati sa tim tipom upozorenja. 
 
 ![img](Flawfinder/html.png)
 
 - Objasnićemo ukratko prijavljene bezbednosne propuste našeg projekta:
   - **CWE-327** - Program koristi neispravan ili rizičan kriptografski algoritam ili protokol. Ovim propustima dodeljen je nivo rizika 3. U našem projektu odnose se na funkciju **srand** koja se poziva u datoteci **server/server.cpp** (u konstruktoru klase) i u datoteci **slagalica/skocko.cpp** (u funkciji *createRandomCombination*). Ova f-ja nebezbedna je jer ako napadač može odrediti ili pogoditi *seed* vrednost korišćenu za inicijalizaciju **srand**-a, može predvideti ceo niz brojeva koji će se generirati. Predlaže nam da upotrebimo bezbedniju tehniku za **genesiranje pseudoslučajnih brojeva**. Možemo iskoristiti funkciju **rand_s** koja je *thread-safe*. 
   - **CWE-362** - Program sadrži sekvencu koda koja može da se izvršava paralelno sa drugim kodom, a zahteva privremeni eksluzivni pristup deljenom resursu. Postoji vremenski interval u kojem deljeni resurs može biti izmenjen izvršavanjem druge sekvence koda istovremeno. Ovaj bezbednosni nedostatak može se zloupotrebiti ubacivanjem malicioznog programa koji bi radio paralelno i izmenio sadržaj resursa što bi moglo izmeniti rad programa. Ovim propustima dodeljen je nivo rizika 2. U našem projektu upozorenja sa ovim kodom odnose se na **otvaranje datoteka pomoću funkcije open** (potrebno proveriti da li bi napadač mogao da izazove trku za resurse).
-  
-    
+     
 * **Rezime**: **Flawfinder** alat pokazao se kao veoma koristan u kontekstu otkrivanja potencijalnih bezbednosnih propusta i slabih tačaka u programu.
 
+Izveštaj dobijen primenom alata: [flawfinder_report.html](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Flawfinder/skripte/flawfinder_report.html)
 
-
-
+Skripta za primenu alata nad projektom: [flawfinder.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Flawfinder/skripte/flawfinder.sh)
 
