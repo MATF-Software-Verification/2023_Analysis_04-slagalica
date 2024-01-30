@@ -94,7 +94,7 @@ firefox Reports_filtered/index.html
 * Iz navedenih razloga postojeći skup testova je proširiv.
 
 Generisani rezultati mogu se videti [ovde](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/tree/main/Gcov/rezultati). \
-Skripta čijim izvršavanjem se mogu reprodukovati rezultati analize pokrivenosti (argumentom komandne linije odabira se da nefiltriran ili filtriran izveštaj): [coverage.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Gcov/skripte/coverage.sh)
+Skripta čijim izvršavanjem se mogu reprodukovati rezultati analize pokrivenosti (argumentom komandne linije odabira se nefiltriran ili filtriran izveštaj): [coverage.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Gcov/skripte/coverage.sh)
 
 ## Clang alati
 
@@ -281,12 +281,12 @@ firefox flawfinder_report.html
 ![img](Flawfinder/html.png)
 
 - Objasnićemo ukratko prijavljene bezbednosne propuste našeg projekta:
-  - **CWE-327** - Program koristi neispravan ili rizičan kriptografski algoritam ili protokol. Ovim propustima dodeljen je nivo rizika 3. U našem projektu odnose se na funkciju **srand** koja se poziva u datoteci **server/server.cpp** (u konstruktoru klase) i u datoteci **slagalica/skocko.cpp** (u funkciji *createRandomCombination*). Ova f-ja nebezbedna je jer ako napadač može odrediti ili pogoditi *seed* vrednost korišćenu za inicijalizaciju **srand**-a, može predvideti ceo niz brojeva koji će se generirati. Predlaže nam da upotrebimo bezbedniju tehniku za **genesiranje pseudoslučajnih brojeva**. Možemo iskoristiti funkciju **rand_s** koja je *thread-safe*. 
-  - **CWE-362** - Program sadrži sekvencu koda koja može da se izvršava paralelno sa drugim kodom, a zahteva privremeni eksluzivni pristup deljenom resursu. Postoji vremenski interval u kojem deljeni resurs može biti izmenjen izvršavanjem druge sekvence koda istovremeno. Ovaj bezbednosni nedostatak može se zloupotrebiti ubacivanjem malicioznog programa koji bi radio paralelno i izmenio sadržaj resursa što bi moglo izmeniti rad programa. Ovim propustima dodeljen je nivo rizika 2. U našem projektu upozorenja sa ovim kodom odnose se na **otvaranje datoteka pomoću funkcije open** (potrebno proveriti da li bi napadač mogao da izazove trku za resurse).
+  - Kod **CWE-327** - Program koristi neispravan ili rizičan kriptografski algoritam ili protokol. Ovim propustima dodeljen je nivo rizika 3. U našem projektu odnose se na funkciju **srand** koja se poziva u datoteci **server/server.cpp** (u konstruktoru klase) i u datoteci **slagalica/skocko.cpp** (u funkciji *createRandomCombination*). Ova f-ja nebezbedna je jer ako napadač može odrediti ili pogoditi *seed* vrednost korišćenu za inicijalizaciju **srand**-a, može predvideti ceo niz brojeva koji će se generirati. Predlaže nam da upotrebimo bezbedniju tehniku za **genesiranje pseudoslučajnih brojeva**. Možemo iskoristiti funkciju **rand_s** koja je *thread-safe*. 
+  - Kod **CWE-362** - Program sadrži sekvencu koda koja može da se izvršava paralelno sa drugim kodom, a zahteva privremeni eksluzivni pristup deljenom resursu. Postoji vremenski interval u kojem deljeni resurs može biti izmenjen izvršavanjem druge sekvence koda istovremeno. Ovaj bezbednosni nedostatak može se zloupotrebiti ubacivanjem malicioznog programa koji bi radio paralelno i izmenio sadržaj resursa što bi moglo izmeniti rad programa. Ovim propustima dodeljen je nivo rizika 2. U našem projektu upozorenja sa ovim kodom odnose se na **otvaranje datoteka pomoću funkcije open** (potrebno proveriti da li bi napadač mogao da izazove trku za resurse).
      
 * **Rezime**: **Flawfinder** alat pokazao se kao veoma koristan u kontekstu otkrivanja potencijalnih bezbednosnih propusta i slabih tačaka u programu.
 
 Izveštaj dobijen primenom alata: [flawfinder_report.html](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Flawfinder/skripte/flawfinder_report.html)
 
-Skripta za primenu alata nad projektom: [flawfinder.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Flawfinder/skripte/flawfinder.sh)
+Skripta za primenu alata nad projektom (moguće je zadati minimalni nivo rizika kao argument komandne linije): [flawfinder.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Flawfinder/skripte/flawfinder.sh)
 

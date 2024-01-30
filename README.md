@@ -11,10 +11,10 @@ analiza je vršena nad main granom projekta i to nad commit-om čiji je heš kod
 Spisak korišćenih alata i tehnika za verifikaciju softvera:
   - **Gcov** - analiza pokrivenosti koda postojećim testovima jedinica koda
   - **Clang alati**:
-    - **Clang-Tidy**
-    - **Clazy**
-    - **Clang-Format**
-  - **Flawfinder**
+    - **Clang-Tidy** - statička analiza
+    - **Clazy** - statička analiza sa akcentom na Qt
+    - **Clang-Format** - automatsko formatiranje koda
+  - **Flawfinder** - statička analiza sa akcentom na bezbednost
   
 Za svaki od navedenih alata postoji direktorijum u kome se nalaze rezultati i skripta za pokretanje odgovarajućeg alata. 
 
