@@ -14,6 +14,7 @@ Spisak korišćenih alata i tehnika za verifikaciju softvera:
     - **Clang-Tidy**
     - **Clazy**
     - **Clang-Format**
+  - **Flawfinder**
   
 Za svaki od navedenih alata postoji direktorijum u kome se nalaze rezultati i skripta za pokretanje odgovarajućeg alata. 
 
