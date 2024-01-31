@@ -15,7 +15,10 @@ Spisak korišćenih alata i tehnika za verifikaciju softvera:
     - **Clazy** - statička analiza sa akcentom na Qt
     - **Clang-Format** - automatsko formatiranje koda
   - **Flawfinder** - statička analiza sa akcentom na bezbednost
-  
+  - **Valgrind**:
+    - **Memcheck** - detekcija memorijskih grešaka
+    - **Callgrind** - analiza grafa poziva funkcija
+    
 Za svaki od navedenih alata postoji direktorijum u kome se nalaze rezultati i skripta za pokretanje odgovarajućeg alata. 
 
 ## :memo: Rezultati i zaključci:

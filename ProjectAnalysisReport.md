@@ -290,3 +290,67 @@ Izveštaj dobijen primenom alata: [flawfinder_report.html](https://github.com/MA
 
 Skripta za primenu alata nad projektom (moguće je zadati minimalni nivo rizika kao argument komandne linije): [flawfinder.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Flawfinder/skripte/flawfinder.sh)
 
+## Valgrind
+
+**Valgrind** je platforma otvorenog koda za kreiranje alata sposobnih za naprednu **dinamičku analizu** mašinskog koda. Valgrind obuhvata nekoliko alata od kojih je svaki specijalizovan za detektovanje određenog problema. Valgrind se može koristiti i kao alat za pravljenje novih alata. Neki od najpoznatijih ugrađenih alata su:
+  - **Memcheck** - detektovanje memorijskih grešaka
+  - **Massif**  - analiza rada dinamičke memorije
+  - **Cachegrind** - profajler keš memorije
+  - **Callgrind** - profajler funkcija
+  - **Helgrind** i **DRD** - otkrivanje grešaka u radu sa nitima
+
+U nastavku biće prikazana procedura i rezultati primene alata **Memcheck** i **Callgrind**.
+ 
+### Memcheck
+
+
+
+
+### Callgrind
+
+**Callgrind** je alat koji generiše **listu poziva funkcija korisničkog programa u vidu grafa**. U osnovnim podešavanjima sakupljeni podaci sastoje se od broja izvršenih instrukcija, njihov odnos sa linijom u izvršnom kodu, odnos pozivaoc/pozvan izmedu funkcija, kao i broj takvih poziva. Ovaj alat može biti veoma koristan u procesu **optimizacije programa** jer nam na osnovu konkretnog izvršavanja programa daje informacije koji se delovi koda (npr. funkcije) najviše izvršavaju ili zahtevaju najviše memorije. Upravo ti delovi koda (npr. funkcije) dobri su kandidati za optimizaciju. 
+
+Ovaj alat pokretaćemo iz komandne linije. Kako bismo ga primenili na naš projekat potrebno je generisati **Profile** verziju programa prilikom izgradnje. **Callgrind** profajlerom f-ja želimo da analiziramo i našu **serversku** i ***klijentsku** aplikaciju. U cilju dobijanja podataka što bližih realnom izvršavanju pokrenućemo serversku i dve klijentske aplikacije (svaku sa prikačenim **Callgrind** alatom) i odigrati jednu partiju do kraja. 
+
+* Pozicioniramo se u build direktorijum projekta i pokrećemo sledeće naredbe (& označava pokretanje procesa u pozadini):
+```
+valgrind --tool=callgrind --log-file="report_callgrind_server" ./server/server &
+valgrind --tool=callgrind --log-file="report_callgrind_client1" ./slagalica/slagalica & 
+valgrind --tool=callgrind --log-file="report_callgrind_client2" ./slagalica/slagalica & 
+```
+* U fajlovima koje smo prosledili kao argumente nalazi se log alata. Fajlovi koji su nam od interesa jesu fajlovi u kojima su generisani izveštaji izvršavanja servera i dva klijenta - njihovi nazivi su **callgrind.out.PID** (PID - Process ID). Ovi fajlovi nam ipak nisu čitljivi pa za vizuelizaciju koristimo pomoćni alat **kcachegrind**. Prvo vizuelizujemo podatke dobijene profajliranjem servera igre:
+```
+kcachegrind callgrind.out.13852
+```
+* Na slici ispod možemo videti **mapu funkcija** koje poziva **serverska main f-ja** kao i listu f-ja koje direktno poziva. Sa leve strane možemo videti i listu f-ja koje su se najduže izvršavale (najveći procenat broja izvršenih instrukcija), koliko su puta pozvane, njihovu lokaciju i druge informacije.
+
+![img](Valgrind/Callgrind/server1.png)
+
+* Na slici ispod možemo videti **graf poziva** f-je **sendSpojniceResult**:
+
+![img](Valgrind/Callgrind/server2.png)
+
+* Vizuelizovaćemo sada i informacije dobijene profajliranjem jednog od klijenata (očekujemo slične rezultate za oba):
+``` 
+kcachegrind callgrind.out.13880
+```
+
+* Na slici ispod vidimo i f-je koje poziva **klijentska main-f-ja**:
+
+![img](Valgrind/Callgrind/client1.png)
+
+
+* Na slici ispod možemo videti **graf poziva** **kostruktora klase MainWindow**:
+
+![img](Valgrind/Callgrind/client2.png)
+
+**Rezime**: Rezultati dobijeni profajliranjem funkcija pomoću **Callgrind** alata pružili su nam zanimljive informacije o pozivima f-ja. Analizom broja instrukcija utvrđujemo da većinu vremena troše pozivi f-ja Qt biblioteke te u tom kontekstu optimizacija f-ja našeg projekta ne bi značajno uticala na poboljšanje performansi programa. Ovo i nije iznenađujuć rezultat s obzirom da igrica nije algoritamski komplikovana.
+
+Izveštaj generisan za server: [callgrind.out.13852](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Callgrind/server/callgrind.out.13852) 
+
+Izveštaj generisan za 1. klijenta: [callgrind.out.13880](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Callgrind/client/callgrind.out.13880) 
+
+Izveštaj generisan za 2. klijenta: [callgrind.out.13888](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Callgrind/client/callgrind.out.13888) 
+
+Skripta za primenu alata nad projektom: [callgrind.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Callgrind/skripte/callgrind.sh) 
+

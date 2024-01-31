@@ -1,0 +1,15 @@
+==13888== Callgrind, a call-graph generating cache profiler
+==13888== Copyright (C) 2002-2017, and GNU GPL'd, by Josef Weidendorfer et al.
+==13888== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==13888== Command: ./slagalica/slagalica
+==13888== Parent PID: 13041
+==13888== 
+==13888== For interactive control, run 'callgrind_control -h'.
+==13888== brk segment overflow in thread #1: can't grow to 0x490b000
+==13888== (see section Limitations in user manual)
+==13888== NOTE: further instances of this message will not be shown
+==13888== 
+==13888== Events    : Ir
+==13888== Collected : 5264275266
+==13888== 
+==13888== I   refs:      5,264,275,266
