@@ -329,11 +329,11 @@ valgrind --show-leak-kinds=all --leak-check=full --track-origins=yes --log-file=
 
 **Rezime**: Dobijeni rezultati govore nam da je **ubedljivo najviše još uvek dostupnih** memorijskih blokova koji nisu oslobođeni. Za ove blokove postoje pokazivači koji na njih pokazuju pa ih programer može osloboditi pre završetka programa. Mnogo teži za rešavanje jeste problem blokova na koje program više nema pokazivač te ne mogu biti oslobođeni.
 
-Izveštaj generisan za server: [report_memcheck_server](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Memcheck/server/izvestaji/report_memcheck_server) 
+Izveštaj generisan za server: [report_memcheck_server](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Memcheck/izvestaji/report_memcheck_server) 
 
-Izveštaj generisan za 1. klijenta: [report_memcheck_client1](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Memcheck/server/izvestaji/report_memcheck_client1)  
+Izveštaj generisan za 1. klijenta: [report_memcheck_client1](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Memcheck/izvestaji/report_memcheck_client1)  
 
-Izveštaj generisan za 2. klijenta: [report_memcheck_client2](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Memcheck/server/izvestaji/report_memcheck_client2)  
+Izveštaj generisan za 2. klijenta: [report_memcheck_client2](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Memcheck/izvestaji/report_memcheck_client2)  
 
 Skripta za primenu alata nad projektom: [memcheck.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Memcheck/skripte/memcheck.sh) 
 
