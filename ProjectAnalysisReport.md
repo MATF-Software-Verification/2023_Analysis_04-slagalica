@@ -292,25 +292,56 @@ Skripta za primenu alata nad projektom (moguće je zadati minimalni nivo rizika 
 
 ## Valgrind
 
-**Valgrind** je platforma otvorenog koda za kreiranje alata sposobnih za naprednu **dinamičku analizu** mašinskog koda. Valgrind obuhvata nekoliko alata od kojih je svaki specijalizovan za detektovanje određenog problema. Valgrind se može koristiti i kao alat za pravljenje novih alata. Neki od najpoznatijih ugrađenih alata su:
+**Valgrind** je platforma otvorenog koda za kreiranje alata sposobnih za naprednu **dinamičku analizu** mašinskog koda. **Valgrind** obuhvata nekoliko alata od kojih je svaki specijalizovan za detektovanje određenog problema. **Valgrind** se može koristiti i kao alat za pravljenje novih alata. Neki od najpoznatijih ugrađenih alata su:
   - **Memcheck** - detektovanje memorijskih grešaka
   - **Massif**  - analiza rada dinamičke memorije
   - **Cachegrind** - profajler keš memorije
   - **Callgrind** - profajler funkcija
   - **Helgrind** i **DRD** - otkrivanje grešaka u radu sa nitima
 
-U nastavku biće prikazana procedura i rezultati primene alata **Memcheck** i **Callgrind**.
+Program pod kontrolom nekog od **Valgrind** alata radi značajno sporije. U nastavku biće prikazana procedura i rezultati primene alata **Memcheck** i **Callgrind** na naš projekat.
  
 ### Memcheck
 
+**Memcheck** je najpoznatiji alat **Valgrind**-a. Ovaj alat detektuje **memorijske greške u programu**. Kako ne vrši analizu izvornog koda već mašinskog, **Memcheck** ima mogućnost analize programa pisanog u bilo kom programskom jeziku. Za programe pisane u jezicima C i C++ detektuje probleme kao što su: upotreba neinicijalizovanih promenljivih, nedozvoljeno čitanje i pisanje, duplo oslobađanje memorije, neupareno korišćenje funkcija za alokaciju i dealokaciju dinamičke memorije, curenje memorije (gubitak pokazivača na alociranu memoriju).
 
+Ovaj alat ugrađen je u QtCreator pa se može pokretati i na taj način ali ćemo ovde demonstrirati pokretanje iz komandne linije. Kako bismo ga primenili na naš projekat potrebno je generisati **Profile** verziju programa prilikom izgradnje. **Memcheck** alatom analiziraćemo potencijalne memorijske propuste u našoj **serverskoj** i **klijentskoj** aplikaciji. U cilju dobijanja podataka što bližih realnom izvršavanju pokrenućemo serversku i dve klijentske aplikacije (svaku sa prikačenim **Memcheck** alatom) i odigrati jednu partiju do kraja.
 
+* Pozicioniramo se u build direktorijum projekta i pokrećemo sledeće naredbe (& označava pokretanje procesa u pozadini):
+```
+valgrind --show-leak-kinds=all --leak-check=full --track-origins=yes --log-file="report_memcheck_server" ./server/server &
+valgrind --show-leak-kinds=all --leak-check=full --track-origins=yes --log-file="report_memcheck_client1" ./slagalica/slagalica &
+valgrind --show-leak-kinds=all --leak-check=full --track-origins=yes --log-file="report_memcheck_client2" ./slagalica/slagalica &
+```
+* Serverska i klijentske aplikacije izvršavaju se veoma sporo.
+
+![img](Valgrind/Memcheck/izvrsavanje.png)
+
+* U fajlovima koje smo prosledili opciji *--log-file* sada se nalaze naši izveštaji. 
+
+* Na dnu ovih izveštaja nalazi se sažetak **analize curenja memorije**. **Memcheck** razlikuje: još uvek dostupne, definitivno izgubljene, indirektno izgubljene i moguće izgubljene memorijske blokove. Sumarni pregled za serversku aplikaciju: 
+
+![img](Valgrind/Memcheck/server.png)
+
+* Sumarni pregled za klijentsku aplikaciju:
+
+![img](Valgrind/Memcheck/client.png)
+
+**Rezime**: Dobijeni rezultati govore nam da je **ubedljivo najviše još uvek dostupnih** memorijskih blokova koji nisu oslobođeni. Za ove blokove postoje pokazivači koji na njih pokazuju pa ih programer može osloboditi pre završetka programa. Mnogo teži za rešavanje jeste problem blokova na koje program više nema pokazivač te ne mogu biti oslobođeni.
+
+Izveštaj generisan za server: [report_memcheck_server](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Memcheck/server/izvestaji/report_memcheck_server) 
+
+Izveštaj generisan za 1. klijenta: [report_memcheck_client1](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Memcheck/server/izvestaji/report_memcheck_client1)  
+
+Izveštaj generisan za 2. klijenta: [report_memcheck_client2](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Memcheck/server/izvestaji/report_memcheck_client2)  
+
+Skripta za primenu alata nad projektom: [memcheck.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Memcheck/skripte/memcheck.sh) 
 
 ### Callgrind
 
 **Callgrind** je alat koji generiše **listu poziva funkcija korisničkog programa u vidu grafa**. U osnovnim podešavanjima sakupljeni podaci sastoje se od broja izvršenih instrukcija, njihov odnos sa linijom u izvršnom kodu, odnos pozivaoc/pozvan izmedu funkcija, kao i broj takvih poziva. Ovaj alat može biti veoma koristan u procesu **optimizacije programa** jer nam na osnovu konkretnog izvršavanja programa daje informacije koji se delovi koda (npr. funkcije) najviše izvršavaju ili zahtevaju najviše memorije. Upravo ti delovi koda (npr. funkcije) dobri su kandidati za optimizaciju. 
 
-Ovaj alat pokretaćemo iz komandne linije. Kako bismo ga primenili na naš projekat potrebno je generisati **Profile** verziju programa prilikom izgradnje. **Callgrind** profajlerom f-ja želimo da analiziramo i našu **serversku** i ***klijentsku** aplikaciju. U cilju dobijanja podataka što bližih realnom izvršavanju pokrenućemo serversku i dve klijentske aplikacije (svaku sa prikačenim **Callgrind** alatom) i odigrati jednu partiju do kraja. 
+Ovaj alat pokretaćemo iz komandne linije. Kako bismo ga primenili na naš projekat potrebno je generisati **Profile** verziju programa prilikom izgradnje. **Callgrind** profajlerom f-ja želimo da analiziramo i našu **serversku** i **klijentsku** aplikaciju. U cilju dobijanja podataka što bližih realnom izvršavanju pokrenućemo serversku i dve klijentske aplikacije (svaku sa prikačenim **Callgrind** alatom) i odigrati jednu partiju do kraja. 
 
 * Pozicioniramo se u build direktorijum projekta i pokrećemo sledeće naredbe (& označava pokretanje procesa u pozadini):
 ```
@@ -318,7 +349,7 @@ valgrind --tool=callgrind --log-file="report_callgrind_server" ./server/server &
 valgrind --tool=callgrind --log-file="report_callgrind_client1" ./slagalica/slagalica & 
 valgrind --tool=callgrind --log-file="report_callgrind_client2" ./slagalica/slagalica & 
 ```
-* U fajlovima koje smo prosledili kao argumente nalazi se log alata. Fajlovi koji su nam od interesa jesu fajlovi u kojima su generisani izveštaji izvršavanja servera i dva klijenta - njihovi nazivi su **callgrind.out.PID** (PID - Process ID). Ovi fajlovi nam ipak nisu čitljivi pa za vizuelizaciju koristimo pomoćni alat **kcachegrind**. Prvo vizuelizujemo podatke dobijene profajliranjem servera igre:
+* U fajlovima koje smo prosledili kao opciji *--log-file* nalazi se log alata. Fajlovi koji su nam od interesa jesu fajlovi u kojima su generisani izveštaji izvršavanja servera i dva klijenta - njihovi nazivi su **callgrind.out.PID** (PID - Process ID). Ovi fajlovi nam ipak nisu čitljivi pa za vizuelizaciju koristimo pomoćni alat **kcachegrind**. Prvo vizuelizujemo podatke dobijene profajliranjem servera igre:
 ```
 kcachegrind callgrind.out.13852
 ```
@@ -334,11 +365,9 @@ kcachegrind callgrind.out.13852
 ``` 
 kcachegrind callgrind.out.13880
 ```
-
 * Na slici ispod vidimo i f-je koje poziva **klijentska main-f-ja**:
 
 ![img](Valgrind/Callgrind/client1.png)
-
 
 * Na slici ispod možemo videti **graf poziva** **kostruktora klase MainWindow**:
 
