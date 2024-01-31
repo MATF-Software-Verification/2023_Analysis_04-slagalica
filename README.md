@@ -21,7 +21,9 @@ Spisak korišćenih alata i tehnika za verifikaciju softvera:
     
 Za svaki od navedenih alata postoji direktorijum u kome se nalaze rezultati i skripta za pokretanje odgovarajućeg alata. 
 
-## :memo: Rezultati i zaključci:
+## :memo: Zaključak
+
+Izvršena je detaljna analiza projekta **Slagalica** i utvrđene su pozitivne strane kao i propusti i pravci mogućih poboljšanja. Kod je napisan na razumljiv način i uglavnom su korišćena dobra programerska rešenja. Kod je modularan i svaka funkcija ima jedistvenu odgovornost. Kod se može smatrati testabilnim. Uz projekat dostupan je i testni podprojekat; ipak utvrđeni nivo pokrivenosti koda testovima je nedovoljan i potrebno je napisati dodatne testove. Korišćenjem statičkih i dinamičkih alata utvrdili smo curenje memorije na nekoliko mesta. Kod nije napisan u potpunosti dosledno u pogledu stila i upotrebe funkcionalnosti modernijih verzija C++-a. Dosta često koriste se magične konstante i lokalnim promenljivama se daju kratka nedeskriptivna imena što je loša programerska praksa. Ovo se uglavnom nije odrazilo negativno na čitljivost koda. Projekat nije koristio neki od alata za automatsko formatiranje.
 
 :mag: Detaljan opis analize projekta i izvedenih zaključaka nalazi se u [ProjectAnalysisReport.md](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/ProjectAnalysisReport.md) fajlu.
 
