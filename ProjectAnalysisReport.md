@@ -309,9 +309,9 @@ Ovaj alat ugrađen je u QtCreator pa se može pokretati i na taj način ali ćem
 
 * Pozicioniramo se u build direktorijum projekta i pokrećemo sledeće naredbe (& označava pokretanje procesa u pozadini):
 ```
-valgrind --show-leak-kinds=all --leak-check=full --track-origins=yes --log-file="report_memcheck_server" ./server/server &
-valgrind --show-leak-kinds=all --leak-check=full --track-origins=yes --log-file="report_memcheck_client1" ./slagalica/slagalica &
-valgrind --show-leak-kinds=all --leak-check=full --track-origins=yes --log-file="report_memcheck_client2" ./slagalica/slagalica &
+valgrind --show-leak-kinds=all --leak-check=full --track-origins=yes --verbose --log-file="report_memcheck_server" ./server/server &
+valgrind --show-leak-kinds=all --leak-check=full --track-origins=yes --verbose --log-file="report_memcheck_client1" ./slagalica/slagalica &
+valgrind --show-leak-kinds=all --leak-check=full --track-origins=yes --verbose --log-file="report_memcheck_client2" ./slagalica/slagalica &
 ```
 * Serverska i klijentske aplikacije izvršavaju se veoma sporo.
 
@@ -327,7 +327,18 @@ valgrind --show-leak-kinds=all --leak-check=full --track-origins=yes --log-file=
 
 ![img](Valgrind/Memcheck/client.png)
 
-**Rezime**: Dobijeni rezultati govore nam da je **ubedljivo najviše još uvek dostupnih** memorijskih blokova koji nisu oslobođeni. Za ove blokove postoje pokazivači koji na njih pokazuju pa ih programer može osloboditi pre završetka programa. Mnogo teži za rešavanje jeste problem blokova na koje program više nema pokazivač te ne mogu biti oslobođeni.
+* Primer curenja memorije u funkciji **socketReadyRead** iz izveštaja za serversku aplikaciju:
+
+![img](Valgrind/Memcheck/serverleak.png)
+
+* Lokalnoj promenljivoj **gamesListModel** dodeljuje se pokazivač na dinamički alociran objekat klase **GamesListModel**. Nakon izlaska iz opsega vidljivosti pomenute promenljive izgubljen je jedini pokazivač na alocirani memorijski blok i on postaje nedostižan. Iz ovog razloga **Memcheck** nam je prijavio ove bajtove kao definitivno izgubljene. Problem smo jednostavno rešili dodavanjem **poziva destruktora** na kraju ovog bloka koda.
+
+![img](Valgrind/Memcheck/serverleakcode.png)
+
+* Analizom izveštaja, odnosno steka poziva prijavljenih propusta, možemo otkriti još nekoliko sličnih primera u kodu našeg projekta. Ipak u velikoj većini slučajeva primećujemo različite **sistemske i Qt funkcije** koje alociraju memoriju na hipu.
+
+**Rezime**: Dobijeni rezultati govore nam da je **ubedljivo najviše još uvek dostupnih** memorijskih blokova koji nisu oslobođeni. Za ove blokove postoje pokazivači koji na njih pokazuju pa ih programer može osloboditi pre završetka programa (mnogo teži za rešavanje jeste problem blokova na koje program više nema pokazivač te ne mogu biti oslobođeni). Najveći deo prijavljenih propusta
+ne odnose se na kod projekta.
 
 Izveštaj generisan za server: [report_memcheck_server](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Memcheck/izvestaji/report_memcheck_server) 
 
