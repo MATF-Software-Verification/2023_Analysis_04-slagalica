@@ -1,0 +1,21 @@
+==3402== Callgrind, a call-graph generating cache profiler
+==3402== Copyright (C) 2002-2017, and GNU GPL'd, by Josef Weidendorfer et al.
+==3402== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==3402== Command: ./server/server
+==3402== Parent PID: 991
+==3402== 
+==3402== For interactive control, run 'callgrind_control -h'.
+==3402== 
+==3402== Process terminating with default action of signal 15 (SIGTERM)
+==3402==    at 0x5435B97: poll (poll.c:29)
+==3402==    by 0x57681F5: ??? (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.7200.4)
+==3402==    by 0x57103E2: g_main_context_iteration (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.7200.4)
+==3402==    by 0x4DFDF6D: QEventDispatcherGlib::processEvents(QFlags<QEventLoop::ProcessEventsFlag>) (in /home/pavle/Qt/6.6.1/gcc_64/lib/libQt6Core.so.6.6.1)
+==3402==    by 0x4B61FC2: QEventLoop::exec(QFlags<QEventLoop::ProcessEventsFlag>) (in /home/pavle/Qt/6.6.1/gcc_64/lib/libQt6Core.so.6.6.1)
+==3402==    by 0x4B5EA8D: QCoreApplication::exec() (in /home/pavle/Qt/6.6.1/gcc_64/lib/libQt6Core.so.6.6.1)
+==3402==    by 0x10D75E: main (main.cpp:11)
+==3402== 
+==3402== Events    : Ir
+==3402== Collected : 11700748
+==3402== 
+==3402== I   refs:      11,700,748

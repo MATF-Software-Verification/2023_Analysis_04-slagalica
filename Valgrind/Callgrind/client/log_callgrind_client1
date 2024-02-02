@@ -1,0 +1,15 @@
+==3403== Callgrind, a call-graph generating cache profiler
+==3403== Copyright (C) 2002-2017, and GNU GPL'd, by Josef Weidendorfer et al.
+==3403== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==3403== Command: ./slagalica/slagalica
+==3403== Parent PID: 991
+==3403== 
+==3403== For interactive control, run 'callgrind_control -h'.
+==3403== brk segment overflow in thread #1: can't grow to 0x48d6000
+==3403== (see section Limitations in user manual)
+==3403== NOTE: further instances of this message will not be shown
+==3403== 
+==3403== Events    : Ir
+==3403== Collected : 5622317111
+==3403== 
+==3403== I   refs:      5,622,317,111

@@ -319,7 +319,9 @@ valgrind --show-leak-kinds=all --leak-check=full --track-origins=yes --verbose -
 
 * U fajlovima koje smo prosledili opciji *--log-file* sada se nalaze naši izveštaji. 
 
-* Na dnu ovih izveštaja nalazi se sažetak **analize curenja memorije**. **Memcheck** razlikuje: još uvek dostupne, definitivno izgubljene, indirektno izgubljene i moguće izgubljene memorijske blokove. Sumarni pregled za serversku aplikaciju: 
+* Na dnu ovih izveštaja nalazi se sažetak **analize curenja memorije**. **Memcheck** razlikuje: još uvek dostupne, definitivno izgubljene, indirektno izgubljene i moguće izgubljene memorijske blokove.
+ 
+* Sumarni pregled za serversku aplikaciju: 
 
 ![img](Valgrind/Memcheck/server.png)
 
@@ -346,7 +348,7 @@ Izveštaj generisan za 1. klijenta: [report_memcheck_client1](https://github.com
 
 Izveštaj generisan za 2. klijenta: [report_memcheck_client2](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Memcheck/izvestaji/report_memcheck_client2)  
 
-Skripta za primenu alata nad projektom: [memcheck.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Memcheck/skripte/memcheck.sh) 
+Skripta za primenu alata nad projektom (argumentom komandne linije odabira se standardan ili detaljan izveštaj): [memcheck.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Memcheck/skripte/memcheck.sh) 
 
 ### Callgrind
 
@@ -356,13 +358,15 @@ Ovaj alat pokretaćemo iz komandne linije. Kako bismo ga primenili na naš proje
 
 * Pozicioniramo se u build direktorijum projekta i pokrećemo sledeće naredbe (& označava pokretanje procesa u pozadini):
 ```
-valgrind --tool=callgrind --log-file="report_callgrind_server" ./server/server &
-valgrind --tool=callgrind --log-file="report_callgrind_client1" ./slagalica/slagalica & 
-valgrind --tool=callgrind --log-file="report_callgrind_client2" ./slagalica/slagalica & 
+valgrind --tool=callgrind --log-file="log_callgrind_server" --callgrind-out-file="report_callgrind_server" ./server/server &
+valgrind --tool=callgrind --log-file="log_callgrind_client1" --callgrind-out-file="report_callgrind_client1" ./slagalica/slagalica & 
+valgrind --tool=callgrind --log-file="log_callgrind_client2" --callgrind-out-file="report_callgrind_client2" ./slagalica/slagalica & 
 ```
-* U fajlovima koje smo prosledili kao opciji *--log-file* nalazi se log alata. Fajlovi koji su nam od interesa jesu fajlovi u kojima su generisani izveštaji izvršavanja servera i dva klijenta - njihovi nazivi su **callgrind.out.PID** (PID - Process ID). Ovi fajlovi nam ipak nisu čitljivi pa za vizuelizaciju koristimo pomoćni alat **kcachegrind**. Prvo vizuelizujemo podatke dobijene profajliranjem servera igre:
+* U fajlove koje smo prosledili opciji *--log-file* preusmeren je log alata (podrazumevano ispisuje na standardni izlaz). Fajlovi koji su nam od interesa jesu fajlovi u kojima su generisani izveštaji izvršavanja servera i dva klijenta - ovim fajlovima podrazumevano se daju nazivi **callgrind.out.PID** (PID - Process ID). Demonstracije radi, opcijom *--callgrind-out-file* dali smo im deskriptivnija imena. Datoteke u ovom formatu nam ipak nisu čitljive pa za vizuelizaciju koristimo pomoćni alat **kcachegrind**. 
+
+* Prvo vizuelizujemo podatke dobijene profajliranjem servera igre:
 ```
-kcachegrind callgrind.out.13852
+kcachegrind report_callgrind_server
 ```
 * Na slici ispod možemo videti **mapu funkcija** koje poziva **serverska main f-ja** kao i listu f-ja koje direktno poziva. Sa leve strane možemo videti i listu f-ja koje su se najduže izvršavale (najveći procenat broja izvršenih instrukcija), koliko su puta pozvane, njihovu lokaciju i druge informacije.
 
@@ -374,7 +378,7 @@ kcachegrind callgrind.out.13852
 
 * Vizuelizovaćemo sada i informacije dobijene profajliranjem jednog od klijenata (očekujemo slične rezultate za oba):
 ``` 
-kcachegrind callgrind.out.13880
+kcachegrind report_callgrind_client1
 ```
 * Na slici ispod vidimo i f-je koje poziva **klijentska main-f-ja**:
 
@@ -384,13 +388,12 @@ kcachegrind callgrind.out.13880
 
 ![img](Valgrind/Callgrind/client2.png)
 
-**Rezime**: Rezultati dobijeni profajliranjem funkcija pomoću **Callgrind** alata pružili su nam zanimljive informacije o pozivima f-ja. Analizom broja instrukcija utvrđujemo da većinu vremena troše pozivi f-ja Qt biblioteke te u tom kontekstu optimizacija f-ja našeg projekta ne bi značajno uticala na poboljšanje performansi programa. Ovo i nije iznenađujuć rezultat s obzirom da igrica nije algoritamski komplikovana.
+**Rezime**: Rezultati dobijeni profajliranjem funkcija pomoću **Callgrind** alata pružili su nam zanimljive informacije o pozivima f-ja. Analizom broja instrukcija utvrđujemo da većinu vremena troše pozivi sistemskih i f-ja Qt biblioteke te u tom kontekstu optimizacija f-ja našeg projekta ne bi značajno uticala na poboljšanje performansi programa. Ovo i nije iznenađujuć rezultat s obzirom da igrica nije algoritamski komplikovana.
 
-Izveštaj generisan za server: [callgrind.out.13852](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Callgrind/server/callgrind.out.13852) 
+Izveštaj generisan za server: [report_callgrind_server](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Callgrind/server/report_callgrind_server) 
 
-Izveštaj generisan za 1. klijenta: [callgrind.out.13880](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Callgrind/client/callgrind.out.13880) 
+Izveštaj generisan za 1. klijenta: [repport_calgrind_client1](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Callgrind/client/report_callgrind_client1) 
 
-Izveštaj generisan za 2. klijenta: [callgrind.out.13888](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Callgrind/client/callgrind.out.13888) 
+Izveštaj generisan za 2. klijenta: [report_callgrind_client2](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Callgrind/client/report_callgrind_client2) 
 
-Skripta za primenu alata nad projektom: [callgrind.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Callgrind/skripte/callgrind.sh) 
-
+Skripta za primenu alata nad projektom (argumentom komandne linije odabira se izveštaj bez ili sa simulacijom keš memorije): [callgrind.sh](https://github.com/MATF-Software-Verification/2023_Analysis_04-slagalica/blob/main/Valgrind/Callgrind/skripte/callgrind.sh) 
