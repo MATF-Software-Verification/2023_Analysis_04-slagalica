@@ -352,7 +352,7 @@ Skripta za primenu alata nad projektom (argumentom komandne linije odabira se st
 
 ### Callgrind
 
-**Callgrind** je alat koji generiše **listu poziva funkcija korisničkog programa u vidu grafa**. U osnovnim podešavanjima sakupljeni podaci sastoje se od broja izvršenih instrukcija, njihov odnos sa linijom u izvršnom kodu, odnos pozivaoc/pozvan izmedu funkcija, kao i broj takvih poziva. Ovaj alat može biti veoma koristan u procesu **optimizacije programa** jer nam na osnovu konkretnog izvršavanja programa daje informacije koji se delovi koda (npr. funkcije) najviše izvršavaju ili zahtevaju najviše memorije. Upravo ti delovi koda (npr. funkcije) dobri su kandidati za optimizaciju. 
+**Callgrind** je alat koji generiše **listu poziva funkcija korisničkog programa u vidu grafa**. U osnovnim podešavanjima sakupljeni podaci sastoje se od broja izvršenih instrukcija, njihovog odnosa sa linijama u izvornom kodu, odnos pozivaoc/pozvan izmedu funkcija, kao i broj takvih poziva. Ovaj alat može biti veoma koristan u procesu **optimizacije programa** jer nam na osnovu konkretnog izvršavanja programa daje informacije koji se delovi koda (npr. funkcije) najviše izvršavaju ili zahtevaju najviše memorije. Upravo ti delovi koda (npr. funkcije) dobri su kandidati za optimizaciju. 
 
 Ovaj alat pokretaćemo iz komandne linije. Kako bismo ga primenili na naš projekat potrebno je generisati **Profile** verziju programa prilikom izgradnje. **Callgrind** profajlerom f-ja želimo da analiziramo i našu **serversku** i **klijentsku** aplikaciju. U cilju dobijanja podataka što bližih realnom izvršavanju pokrenućemo serversku i dve klijentske aplikacije (svaku sa prikačenim **Callgrind** alatom) i odigrati jednu partiju do kraja. 
 
@@ -376,6 +376,14 @@ kcachegrind report_callgrind_server
 
 ![img](Valgrind/Callgrind/server2.png)
 
+* Ako želimo da se fokusiramo na f-je koje su definisane u našem projektu možemo odabrati opciju **Grouping po ELF objektima** i fokusirati se na onaj koji odgovara našem projektu **server**. Sada možemo videti koje naše f-je imaju najveći procenat izvršenih instrukcija.  Vidimo f-ju **socketReadyRead** odmah ispod *main* i da **10.3% izvršenih instrukcija** pripada njoj (22% su njene instrukcije a ostatak su instrukcije f-ja koje ona poziva). Prikazujemo listu f-ja koje ona poziva: 
+
+![img](Valgrind/Callgrind/server3.png)
+
+* Na slici ispod možemo videti **graf poziva** f-je **skockoAttempt**. Ova f-ja po 9 puta direktno poziva f-je **calculateSkockoPoints** i **checkSkockoAtttempt**.
+
+![img](Valgrind/Callgrind/server4.png)
+
 * Vizuelizovaćemo sada i informacije dobijene profajliranjem jednog od klijenata (očekujemo slične rezultate za oba):
 ``` 
 kcachegrind report_callgrind_client1
@@ -387,6 +395,10 @@ kcachegrind report_callgrind_client1
 * Na slici ispod možemo videti **graf poziva** **kostruktora klase MainWindow**:
 
 ![img](Valgrind/Callgrind/client2.png)
+
+* Na isti način i ovde radimo **Grouping po ELF objektima** i fokusiramo se na onaj koji odgovara našem projektu **slagalica**. Pogledom na listu naših f-ja koje imaju najveći procenat izvršenih instrukcija zaključujemo da se uglavnom radi o funkcijama vezanim za korisnički interfejs. Na slici ispod možemo videti ovu listu i **graf poziva** **konstruktora klase Skocko**. Vidimo da konstruktor 2 puta poziva f-ju **generateRandomCombination** (koja dalje poziva **srand** generator pseudoslučajnih brojeva):
+
+![img](Valgrind/Callgrind/client3.png) 
 
 **Rezime**: Rezultati dobijeni profajliranjem funkcija pomoću **Callgrind** alata pružili su nam zanimljive informacije o pozivima f-ja. Analizom broja instrukcija utvrđujemo da većinu vremena troše pozivi sistemskih i f-ja Qt biblioteke te u tom kontekstu optimizacija f-ja našeg projekta ne bi značajno uticala na poboljšanje performansi programa. Ovo i nije iznenađujuć rezultat s obzirom da igrica nije algoritamski komplikovana.
 
