@@ -376,7 +376,7 @@ kcachegrind report_callgrind_server
 
 ![img](Valgrind/Callgrind/server2.png)
 
-* Ako želimo da se fokusiramo na f-je koje su definisane u našem projektu možemo odabrati opciju **Grouping po ELF objektima** i fokusirati se na onaj koji odgovara našem projektu **server**. Sada možemo videti koje naše f-je imaju najveći procenat izvršenih instrukcija.  Vidimo f-ju **socketReadyRead** odmah ispod *main* i da **10.3% izvršenih instrukcija** pripada njoj (22% su njene instrukcije a ostatak su instrukcije f-ja koje ona poziva). Prikazujemo listu f-ja koje ona poziva: 
+* Ako želimo da se fokusiramo na f-je koje su definisane u našem projektu možemo odabrati opciju **Grouping po ELF objektima** i posvetiti pažnju onome koji odgovara našem projektu **server**. Sada možemo videti koje naše f-je imaju najveći procenat izvršenih instrukcija.  Vidimo f-ju **socketReadyRead** odmah ispod *main*-a i da **10.33% izvršenih instrukcija** pripada njoj (22% su njene instrukcije a ostatak su instrukcije f-ja koje ona poziva). Prikazujemo listu f-ja koje ona direktno poziva: 
 
 ![img](Valgrind/Callgrind/server3.png)
 
