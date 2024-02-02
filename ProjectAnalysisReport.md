@@ -396,7 +396,7 @@ kcachegrind report_callgrind_client1
 
 ![img](Valgrind/Callgrind/client2.png)
 
-* Na isti način i ovde radimo **Grouping po ELF objektima** i fokusiramo se na onaj koji odgovara našem projektu **slagalica**. Pogledom na listu naših f-ja koje imaju najveći procenat izvršenih instrukcija zaključujemo da se uglavnom radi o funkcijama vezanim za korisnički interfejs. Na slici ispod možemo videti ovu listu i **graf poziva** **konstruktora klase Skocko**. Vidimo da konstruktor 2 puta poziva f-ju **generateRandomCombination** (koja dalje poziva **srand** generator pseudoslučajnih brojeva):
+* Na isti način i ovde radimo **Grouping po ELF objektima** i fokusiramo se na onaj koji odgovara našem projektu **slagalica**. Pogledom na listu naših f-ja koje imaju najveći procenat izvršenih instrukcija zaključujemo da se uglavnom radi o funkcijama vezanim za korisnički interfejs. Na slici ispod možemo videti ovu listu i **graf poziva** **konstruktora klase Skocko**. Vidimo da konstruktor 2 puta poziva f-ju **createRandomCombination** (koja dalje poziva **srand** generator pseudoslučajnih brojeva):
 
 ![img](Valgrind/Callgrind/client3.png) 
 
