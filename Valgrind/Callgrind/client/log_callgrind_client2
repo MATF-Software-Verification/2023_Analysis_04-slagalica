@@ -1,15 +1,15 @@
-==3404== Callgrind, a call-graph generating cache profiler
-==3404== Copyright (C) 2002-2017, and GNU GPL'd, by Josef Weidendorfer et al.
-==3404== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==3404== Command: ./slagalica/slagalica
-==3404== Parent PID: 991
-==3404== 
-==3404== For interactive control, run 'callgrind_control -h'.
-==3404== brk segment overflow in thread #1: can't grow to 0x490f000
-==3404== (see section Limitations in user manual)
-==3404== NOTE: further instances of this message will not be shown
-==3404== 
-==3404== Events    : Ir
-==3404== Collected : 5640472810
-==3404== 
-==3404== I   refs:      5,640,472,810
+==3369== Callgrind, a call-graph generating cache profiler
+==3369== Copyright (C) 2002-2017, and GNU GPL'd, by Josef Weidendorfer et al.
+==3369== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==3369== Command: ./slagalica/slagalica
+==3369== Parent PID: 999
+==3369== 
+==3369== For interactive control, run 'callgrind_control -h'.
+==3369== brk segment overflow in thread #1: can't grow to 0x4921000
+==3369== (see section Limitations in user manual)
+==3369== NOTE: further instances of this message will not be shown
+==3369== 
+==3369== Events    : Ir
+==3369== Collected : 5492577084
+==3369== 
+==3369== I   refs:      5,492,577,084
